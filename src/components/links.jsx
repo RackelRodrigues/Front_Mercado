@@ -2,7 +2,8 @@ import styled from "styled-components";
 
 export const LinkA = styled.a`
  text-decoration: none;
-
+margin-left: 15px;
+margin-top: 10px;
 `;
 //links com a 
 //para ficar voltar a tela inicial
