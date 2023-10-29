@@ -13,6 +13,11 @@ import styled from "styled-components";
   display: flex;
   align-items: center;
   justify-content: center;
+
+  &:hover{
+    background-color: #205D9E;
+
+}
  `;
 
  export const ContainerButton = styled.div`
@@ -32,9 +37,12 @@ width: 100px;
 height: 50px;
 margin-right: 15px;
 margin-top: 10px;
+transition: background-color 0.3s ease;
 
+&:hover{
+    background-color: #205D9E;
 
-
+}
 
 `;
  

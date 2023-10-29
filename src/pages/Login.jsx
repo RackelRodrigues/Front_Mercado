@@ -10,7 +10,7 @@ import {LabelStyle} from '../components/labelstyle';
 import {Linkstyle, BlueSpan, ContainerIncreva} from '../components/linkstyle';
 import Caipira from '../images/Caipira.png';
 import {Checkbok, Containercheckbok} from '../components/checkbok'
-
+import {Link} from "react-router-dom";
 
 
 
@@ -55,7 +55,7 @@ const Login = () =>{
 </ContainerButton>
 
 <ContainerIncreva>
-<Linkstyle href="#">Não tem uma conta?<BlueSpan>Inscreva-se</BlueSpan></Linkstyle>
+<Link to="/Create account"><Linkstyle >Não tem uma conta?<BlueSpan>Inscreva-se</BlueSpan></Linkstyle></Link>
 </ContainerIncreva>
  </ContainerLogin>
 

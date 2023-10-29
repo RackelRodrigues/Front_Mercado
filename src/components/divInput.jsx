@@ -28,6 +28,15 @@ export const Divconteinerstyle = styled.div`
  gap: 20px;
  flex-direction: column;
 
+`;
 
+export const Divtermos = styled.div`
+ display: flex;
+ gap: 20px;
+ flex-direction: row;
+ margin-top: 20px;
+ justify-content: center;
+ align-items: center;
+ 
 
 `;

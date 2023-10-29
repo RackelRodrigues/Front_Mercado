@@ -1,5 +1,5 @@
 import { TitleH2 } from '../components/titles';
-import { DivInput, Divconteinerstyle } from '../components/divInput';
+import { DivInput, Divconteinerstyle, Divtermos } from '../components/divInput';
 import { Inputstyle } from '../components/Inputstyle';
 import {LinkA, DivApi} from '../components/links'
 import { Buttonsend, ContainerButton, ButtonLogin} from '../components/buttonstyle';
@@ -9,18 +9,20 @@ import {AiOutlineMail, AiFillLinkedin} from "react-icons/ai";
 import { GrHomeRounded } from "react-icons/gr";
 import {FcGoogle} from "react-icons/fc";
 import {Header} from '../components/HeaderStyle';
-import {Divisao, DivisaoContainer} from '../components/linkstyle';
+import {Divisao, DivisaoContainer, BlueSpan} from '../components/linkstyle';
+import { Checkbok, Containercheckbok } from '../components/checkbok';
+import {LabelStyle2} from '../components/labelstyle';
+import {Link} from "react-router-dom";
 
 
-
-const CreateAccount =()=>{
+const CreateAccount = ()=>{
  return (
     <>
     <Header>
-<LinkA href="#">
+<Link to="/Home"><LinkA href="#">
 <GrHomeRounded size={30} color='#000000'/>
-</LinkA>
-<ButtonLogin >Login</ButtonLogin>
+</LinkA></Link>
+<Link to="/Login"><ButtonLogin>Login</ButtonLogin></Link>
 </Header>
 
 
@@ -93,6 +95,11 @@ const CreateAccount =()=>{
 </DivInput>
 
 </Divconteinerstyle>
+
+<Divtermos>
+<Checkbok type='checkbox'/>
+<LabelStyle2>concordo com os termos de <BlueSpan>serviço</BlueSpan> e <BlueSpan>política de privacidade</BlueSpan></LabelStyle2>
+</Divtermos>
 
 <ContainerButton>
 <Buttonsend>Criar Conta</Buttonsend>
