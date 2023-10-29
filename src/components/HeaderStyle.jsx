@@ -22,15 +22,27 @@ width: 100%;
  top: 0;
  left: 0;
  margin-bottom: 20px;
- background-color: #B6ECF7;
+ background-color: transparent;
  align-items: center;
  display: flex;
- padding-left: 20px;
+ padding-left: 35px;
+ box-shadow: 5px 5px 10px 0 rgba(128, 128, 128, 0.5);
+
 
 
  >svg{
     position: fixed;
     cursor: pointer;
  }
+
+`;
+
+
+
+export const ConteinerHome = styled.div`
+
+//conteiner que fica no header, para ficar o input é tudo mais
+
+
 
 `;
