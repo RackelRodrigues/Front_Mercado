@@ -8,11 +8,13 @@ display: flex;
 align-self: center;
 
 
+
 `;
 
 
 export const Containercheckbok = styled.div`
 //por motivos de divisão
 display: flex;
+
 
 `;

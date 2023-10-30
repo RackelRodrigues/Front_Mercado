@@ -32,7 +32,7 @@ export const Divconteinerstyle = styled.div`
 
 export const Divtermos = styled.div`
  display: flex;
- gap: 20px;
+ gap: 5px;
  flex-direction: row;
  margin-top: 20px;
  justify-content: center;

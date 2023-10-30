@@ -40,9 +40,17 @@ width: 100%;
 
 
 export const ConteinerHome = styled.div`
+  z-index: 2;
+  display: flex;
+  margin-left: auto;
+  margin-right: 80px;
+  position: sticky;
+  cursor: pointer;
+  
 
-//conteiner que fica no header, para ficar o input é tudo mais
-
+& > svg {
+   margin-left: 25px;
+  }
 
 
 `;

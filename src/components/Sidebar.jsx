@@ -63,11 +63,20 @@ export const Container = styled.div`
     margin: 0 20px;
     color: #222;
     width: 20px;
+    margin-right: 15px;
   }
 
   &:hover {
-    background-color: #DCDCDC;
+    background-color: #2870BD;
     }
+`;
+
+ export const Svg = styled.div`
+display: flex;
+margin-right: 20px;
+
+
+
 `;
 
 

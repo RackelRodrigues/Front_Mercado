@@ -14,5 +14,6 @@ export const LabelStyle2 = styled.label`
  font-family: 'Lato', sem serifa;
  font-size: 17px;
  padding-right: 10px;
+ margin: 0;
 `;
 

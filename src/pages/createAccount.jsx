@@ -13,16 +13,41 @@ import {Divisao, DivisaoContainer, BlueSpan} from '../components/linkstyle';
 import { Checkbok, Containercheckbok } from '../components/checkbok';
 import {LabelStyle2} from '../components/labelstyle';
 import {Link} from "react-router-dom";
+import { useEffect } from 'react';
 
 
 const CreateAccount = ()=>{
+  const [user, setUser] = useState({nome:'', email:'',cpf:'', telefone:'', senha:''})
+  
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+
+
+
+  useEffect(() => {
+    fetch("/add/user")
+      .then((res) => res.json())
+      .then((data) => {
+        setUser(data.User);
+      });
+  }, []);
+
+
+
  return (
     <>
     <Header>
 <Link to="/Home"><LinkA href="#">
 <GrHomeRounded size={30} color='#000000'/>
-</LinkA></Link>
-<Link to="/Login"><ButtonLogin>Login</ButtonLogin></Link>
+</LinkA>
+</Link>
+<Link to="/Login">
+    <ButtonLogin>Login</ButtonLogin>
+</Link>
 </Header>
 
 
@@ -44,22 +69,30 @@ const CreateAccount = ()=>{
 
 <Divconteinerstyle>
 <DivInput>
-<Inputstyle type='text' placeholder='Nome Completo'/>
+<Inputstyle type='text' placeholder='Nome Completo' name="nome"
+ value={formData.nome} onChange={handleChange}
+/>
 <BsPerson size={30} color="#000000"/>
 </DivInput>
 
 
 <DivInput>
-<Inputstyle type='text' placeholder='Digite seu CPF no formato: xxx.xxx.xxx-xx'/>
+<Inputstyle type='text' placeholder='Digite seu CPF no formato: xxx.xxx.xxx-xx'
+ value={formData.cpf}  onChange={handleChange}
+/>
 </DivInput>
 
 <DivInput>
-<Inputstyle type='text' placeholder='Numero de telefone'/>
+<Inputstyle type='text' placeholder='Numero de telefone'
+ value={formData.telefone} onChange={handleChange}
+/>
 <BsTelephone size={30} color='#000000'/>
 </DivInput>
 
 <DivInput>
-<Inputstyle type='text' placeholder='Digite seu Enderenço e-mail'/>
+<Inputstyle type='text' placeholder='Digite seu Enderenço e-mail'
+ value={formData.email} onChange={handleChange}
+/>
 <AiOutlineMail size={30} color='#000000'/>
 </DivInput>
 </Divconteinerstyle>
@@ -80,6 +113,11 @@ const CreateAccount = ()=>{
 </DivInput>
 
 <DivInput>
+<Inputstyle type='text' placeholder='Numero'/>
+<BiLockAlt size={30} color='#000000'/>
+</DivInput>
+
+<DivInput>
 <Inputstyle type='text' placeholder='Cep'/>
 <GrHomeRounded size={25} color='#000000'/>
 </DivInput>
@@ -94,6 +132,7 @@ const CreateAccount = ()=>{
 <BiLockAlt size={30} color='#000000'/>
 </DivInput>
 
+
 </Divconteinerstyle>
 
 <Divtermos>
@@ -102,7 +141,7 @@ const CreateAccount = ()=>{
 </Divtermos>
 
 <ContainerButton>
-<Buttonsend>Criar Conta</Buttonsend>
+<Buttonsend type='submit'>Criar Conta</Buttonsend>
 </ContainerButton>
 
 
