@@ -1,7 +1,7 @@
 import { TitleH2 } from '../components/titles';
 import { DivInput, Divconteinerstyle, Divtermos } from '../components/divInput';
 import { Inputstyle } from '../components/Inputstyle';
-import {LinkA, DivApi} from '../components/links'
+import {LinkA, DivApi, Form} from '../components/links'
 import { Buttonsend, ContainerButton, ButtonLogin} from '../components/buttonstyle';
 import { BsTelephone, BsPerson, } from "react-icons/bs";
 import { BiLockOpenAlt, BiLockAlt, BiLogoFacebookSquare} from "react-icons/bi";
@@ -19,8 +19,8 @@ import { useState, useEffect } from 'react';
 
 const CreateAccount = () =>{
 
-  const [user, setUser] = useState({nome:'', email:'',cpf:'', telefone:'', senha:''})
-  const [adress, setAdress] = useState({rua: '', bairro: '', numero: '', cep:''}) 
+  const [user, setUser] = useState({nome:'', email:'',cpf:'', telefone:'', confirme:'',senha:''})
+  const [address, setAddress] = useState({rua: '', bairro: '', numero: '', cep:''}) 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,7 +29,7 @@ const CreateAccount = () =>{
 
   const handleChange2 = (e) => {
     const { name, value } = e.target;
-    setAdress({ ...adress, [name]: value });
+    setAddress({ ...adress, [name]: value });
   };
 
   const handleSubmit = (e) => {
@@ -61,7 +61,7 @@ const CreateAccount = () =>{
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(adress),
+        body: JSON.stringify(address),
       })
         .then((response) => {
           if (!response.ok) {
@@ -112,7 +112,8 @@ return (
 <Divisao>ou use seu email</Divisao>
 </DivisaoContainer>
 
-<Divconteinerstyle onSubmit={handleSubmit}>
+<Form onSubmit={handleSubmit}>
+<Divconteinerstyle>
 <DivInput>
 <Inputstyle type='text' placeholder='Nome Completo' name="nome"
  value={user.nome} onChange={handleChange}
@@ -122,20 +123,20 @@ return (
 
 
 <DivInput>
-<Inputstyle type='text' placeholder='Digite seu CPF no formato: xxx.xxx.xxx-xx'
+<Inputstyle type='text' placeholder='Digite seu CPF no formato: xxx.xxx.xxx-xx'  name="cpf"
  value={user.cpf}  onChange={handleChange}
 />
 </DivInput>
 
 <DivInput>
-<Inputstyle type='text' placeholder='Numero de telefone'
+<Inputstyle type='text' placeholder='Numero de telefone'  name="telefone"
  value={user.telefone} onChange={handleChange}
 />
 <BsTelephone size={30} color='#000000'/>
 </DivInput>
 
 <DivInput>
-<Inputstyle type='text' placeholder='Digite seu Enderenço e-mail'
+<Inputstyle type='text' placeholder='Digite seu Enderenço e-mail'  name="email"
  value={user.email} onChange={handleChange}
 />
 <AiOutlineMail size={30} color='#000000'/>
@@ -146,44 +147,46 @@ return (
 
 <TitleH2>Address</TitleH2>
 
-<Divconteinerstyle onSubmit={handleSubmit}>
+<Divconteinerstyle >
 <DivInput>
-<Inputstyle type='text' placeholder='Rua'
-value={adress.rua} onChange={handleChange2}
+<Inputstyle type='text' placeholder='Rua'  name="rua"
+value={address.rua} onChange={handleChange2}
 />
 <GrHomeRounded size={25} color='#000000'/>
 </DivInput>
 
 <DivInput>
-<Inputstyle type='text' placeholder='Bairro'
-value={adress.bairro} onChange={handleChange2}
+<Inputstyle type='text' placeholder='Bairro'  name="bairro"
+value={address.bairro} onChange={handleChange2}
 />
 <GrHomeRounded size={25} color='#000000'/>
 </DivInput>
 
 <DivInput>
-<Inputstyle type='text' placeholder='Numero'
-value={adress.numero} onChange={handleChange2}
+<Inputstyle type='text' placeholder='Numero'  name="numero"
+value={address.numero} onChange={handleChange2}
 />
 </DivInput>
 
 <DivInput>
-<Inputstyle type='text' placeholder='Cep'
+<Inputstyle type='text' placeholder='Cep'  name="cep"
 
-value={adress.cep} onChange={handleChange2}
+value={address.cep} onChange={handleChange2}
 />
 <GrHomeRounded size={25} color='#000000'/>
 </DivInput>
 
 <DivInput>
-<Inputstyle type='text' placeholder='Digite sua melhor senha'/>
+<Inputstyle type='text' placeholder='Digite sua melhor senha' name='confirme'
+value={user.confirme} onChange={handleChange}
+/>
 <BiLockOpenAlt size={30} color='#000000'/>
 </DivInput>
 
 <DivInput>
-<Inputstyle type='text' placeholder='Confirme sua senha'
+<Inputstyle type='text' placeholder='Confirme sua senha' name='senha'
 
-value={adress.senha} onChange={handleChange2}
+value={user.senha} onChange={handleChange}
 />
 <BiLockAlt size={30} color='#000000'/>
 </DivInput>
@@ -197,12 +200,10 @@ value={adress.senha} onChange={handleChange2}
 </Divtermos>
 
 <ContainerButton>
-<Buttonsend type='submit'>Criar Conta</Buttonsend>
+<Buttonsend type="submit">Criar Conta</Buttonsend>
 </ContainerButton>
 
-
-    
-    
+</Form>
     </>
 )
 }

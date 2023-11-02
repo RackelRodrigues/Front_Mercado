@@ -15,20 +15,14 @@ export const LogoImage = styled.img`
   transform: translate(-50%, -50%);
 `;
 
+//caixa das promocoes do home
 export const Promobox = styled.div`
-width: 1100px;
-height: 500px;
 
+width: 1350px;
+height: 100%;
+margin-top: 100px;
+z-index: 0;
+position: relative;
 
 `;
 
-
-export const PromoHome = styled.img`
-  width: 100%;
-  max-width: 1440px;
-  max-height: 700px; 
-  object-fit: cover; 
-  margin-top: 100px;
-  z-index: 1;
-  
-`;

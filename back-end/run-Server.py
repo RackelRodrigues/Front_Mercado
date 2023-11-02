@@ -15,6 +15,7 @@ def addUser():
         email = data['email']
         cpf = data['cpf']
         telefone = data['telefone']
+        confirme =data['confirme']
         senha = data['senha']
         print(nome,email,cpf,telefone,senha)
 
@@ -23,6 +24,7 @@ def addUser():
             email = email,
             cpf = cpf,
             telefone = telefone,
+            confirme = confirme,
             senha = senha
         )   
         user.save()

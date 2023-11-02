@@ -9,7 +9,6 @@ import {  IoIceCreamOutline } from "react-icons/io5";
 import { LuCat } from "react-icons/lu";
 
 const ConteinerSidebar= styled.div`
-
 height: 100%;
 width: 300px;
 background-color: #EDEEF0;
@@ -43,6 +42,8 @@ animation: showSidebar .4s;
 
 export const Content = styled.div`
 margin-top: 100px;
+z-index: 1;
+position: fixed;
 `;
 
 export const Container = styled.div`
@@ -57,7 +58,7 @@ export const Container = styled.div`
   width: 255px;
   height: 20px;
   color: #222;
-
+  z-index: 1;
 
   > svg {
     margin: 0 20px;

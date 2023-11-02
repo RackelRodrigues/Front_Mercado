@@ -8,9 +8,10 @@ import { ConteinerHome } from "../components/HeaderStyle";
 import {BsPersonCircle} from "react-icons/bs";
 import { Link } from "react-router-dom";
 import{Boxinputheader, InputHeader} from "../components/Inputstyle";
-import {PromoHome } from "../components/logo"
-import Promocao_caipira from "../images/promoção_caipira.png";
+import {Promobox } from "../components/logo"
 import { Svg } from "../components/Sidebar";
+import Mysliper from '../components/mysliper';
+
 
 
 
@@ -42,9 +43,11 @@ const Home = () => {
      
         </ConteinerHome>
         </Headerhome>
+
         
-  
-    <PromoHome src={Promocao_caipira} alt='Promoções do dia'/>
+        <Promobox>
+      <Mysliper/>
+       </Promobox>
   
 
         </>
