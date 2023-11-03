@@ -7,6 +7,7 @@ import Login from './pages/Login.jsx';
 import Errorpage from './pages/Errorpage.jsx';
 import CreateAccount from './pages/createAccount.jsx';
 import Home from './pages/Home.jsx'
+import MeuCarrinho from './pages/carrinho.jsx'
 
 
 const router =  createBrowserRouter ([
@@ -27,6 +28,10 @@ const router =  createBrowserRouter ([
   {
     path: "Create account",
     element: <CreateAccount/>,
+  },
+  {
+    path: "Meu Carrinho",
+    element: <MeuCarrinho/>,
   }
     ]
   },

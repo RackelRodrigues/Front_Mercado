@@ -1,6 +1,9 @@
 from flask import *
 from esquema import *
 
+
+
+
 app = Flask(__name__)
 
 app.config['JSON_SORT_KEYS'] = False
@@ -133,7 +136,7 @@ def addCategory():
 @app.route('/')
 def index():
 
-    return 'ok'
+    return "ok";
 
 
 if __name__ == '__main__':
