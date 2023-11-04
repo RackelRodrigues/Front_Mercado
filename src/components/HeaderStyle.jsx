@@ -23,7 +23,7 @@ export const Headerhome = styled.header`
  left: 0;
  right: 0;
  margin-bottom: 20px;
- background-color: transparent;
+ background-color: #ffff;
  align-items: center;
  display: flex;
  padding-left: 35px;

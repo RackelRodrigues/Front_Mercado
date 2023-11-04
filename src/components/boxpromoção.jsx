@@ -15,7 +15,7 @@ justify-content: center;
 `;
 
 
-const ImgProduto = Styled.img`
+export const ImgProduto = Styled.img`
 width: 300px;
 heigth: 175px;
 background-color: #fff;

@@ -20,3 +20,27 @@ export const TitleH2 =styled.h2`
   justify-content: center;
  padding-top: 3rem;
 `;
+
+export const TitleH1 = styled.h1`
+ color: #ff2700;
+ font-size: 30px;
+ font-weight: bold;
+ font-family: 'Lato', sem serifa;
+ display: flex;
+justify-content: center;
+align-items: center;
+margin-top: 15px;
+
+`;
+
+export const Titlepdados = styled.p`
+font-family: 'Lato', sem serifa;
+ font-weight: 100;
+ font-size: 17px;
+ color: #000000;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ margin: 10px;
+
+`;

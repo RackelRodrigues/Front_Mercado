@@ -10,10 +10,10 @@ import { GrHomeRounded } from "react-icons/gr";
 import {FcGoogle} from "react-icons/fc";
 import {Header} from '../components/HeaderStyle';
 import {Divisao, DivisaoContainer, BlueSpan} from '../components/linkstyle';
-import { Checkbok, Containercheckbok } from '../components/checkbok';
+import { Checkbok} from '../components/checkbok';
 import {LabelStyle2} from '../components/labelstyle';
 import {Link} from "react-router-dom";
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 
 
@@ -113,6 +113,7 @@ return (
 </DivisaoContainer>
 
 <Form onSubmit={handleSubmit}>
+  
 <Divconteinerstyle>
 <DivInput>
 <Inputstyle type='text' placeholder='Nome Completo' name="nome"

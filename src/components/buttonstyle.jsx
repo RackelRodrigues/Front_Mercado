@@ -35,7 +35,7 @@ export const ButtonLogin = styled.button`
 border-radius: 10px;
 background: #1D4ED8;
 width: 100px;
-height: 80px;
+height: 50px;
 margin-right: 15px;
 margin-top: 10px;
 transition: background-color 0.3s ease;
@@ -67,6 +67,34 @@ margin: auto;
 
 &:hover{
     background-color: #205D9E;
+}
+ `;
+
+
+export const ContinueAtencao = styled.button`
+background-color: #1D4ED8;
+ width: 150px;
+ height: 40px;
+display: flex;
+justify-content: center;
+align-items: center;
+color: #FFF;
+transition: background-color 0.3s ease;
+margin-top: 20px;
+
+&:hover{
+    background-color: #205D9E;
+
+}
+
+>svg{
+
+display: flex;
+align-items: center;
+justify-content: center;
+margin-left: 10PX;
+margin-top: 5px;
 
 }
  `;
+

@@ -41,3 +41,14 @@ export const Divtermos = styled.div`
 
 `;
 
+export const ConteinerInputsDados = styled.div`
+display: flex;
+ gap: 20px;
+ flex-direction: column;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+
+
+
+`;

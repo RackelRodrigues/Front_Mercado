@@ -26,3 +26,9 @@ position: relative;
 
 `;
 
+
+
+export const AtencaoImg =styled.img`
+
+
+`;

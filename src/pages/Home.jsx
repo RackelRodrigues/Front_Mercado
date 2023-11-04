@@ -18,10 +18,10 @@ import  Boxpromocao from "../components/boxpromoção";
 const BoxHome = Styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  grid-gap: 50px;
+  grid-gap: 40px;
   justify-content: center;
   align-items: center;
-padding: 30px;
+  padding: 30px;
   background-color: #fffff;
   margin-bottom: 20px;
   margin: 0 auto;
