@@ -37,12 +37,10 @@ align-items: center;
 `;
 
 const ButtonDiv = Styled.div`
-
-position: absolute;
+  position: absolute;
   top: 105%;
   left: 65%;
   transform: translate(-50%, -50%);
-
 `;
 
 
