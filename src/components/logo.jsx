@@ -28,7 +28,29 @@ position: relative;
 
 
 
-export const AtencaoImg =styled.img`
+export const AtencaoImg = styled.img`
 
 
+`;
+
+
+export const Carrinhoimg = styled.img`
+ width: 200px;
+ max-width: 100%;
+ height: 200px;
+ display: flex;
+ position: absolute;
+top: -5%;
+left: 5%;
+
+`;
+
+
+export const ProdutoCarrinhoimg = styled.img`
+ width: 100px;
+ max-width: 100%;
+ height: 100px;
+ position: relative;
+ top: 13%;
+ margin: 10px;
 `;

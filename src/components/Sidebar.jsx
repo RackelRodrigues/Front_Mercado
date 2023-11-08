@@ -7,6 +7,7 @@ import { GiFruitBowl, GiSlicedBread } from "react-icons/gi";
 import { PiBowlFoodBold, PiLeafBold } from "react-icons/pi";
 import {  IoIceCreamOutline } from "react-icons/io5";
 import { LuCat } from "react-icons/lu";
+import { Link } from "react-router-dom";
 
 const ConteinerSidebar= styled.div`
 height: 100%;
@@ -95,16 +96,17 @@ const Sidebar =({ active}) =>{
   <AiOutlineClose size={30} color="#222" onClick={Closesidebar}/>
 
   <Content>
-   <SidebarItem Icon={BiSolidDrink} Text="Bebidas"/>
-   <SidebarItem Icon={MdCleanHands} Text="Higiene"/>
-   <SidebarItem Icon={GiFruitBowl} Text="Frescos"/>
-   <SidebarItem Icon={PiBowlFoodBold} Text="Mercearia"/>
-   <SidebarItem Icon={MdCleaningServices} Text="Limpeza"/>
-   <SidebarItem Icon={IoIceCreamOutline} Text="Congelados"/>
-   <SidebarItem Icon={MdOutlineHealthAndSafety} Text="Saúde"/>
-   <SidebarItem Icon={LuCat} Text="Animais"/>
-   <SidebarItem Icon={GiSlicedBread} Text="Padaria"/>
-   <SidebarItem Icon={PiLeafBold} Text="Organicos"/>
+
+  <Link to="/Bebidas"><SidebarItem Icon={BiSolidDrink} Text="Bebidas"/></Link>
+  <Link to="/Higiene"><SidebarItem Icon={MdCleanHands} Text="Higiene"/></Link>
+  <Link to="/Frescos"><SidebarItem Icon={GiFruitBowl} Text="Frescos"/></Link>
+  <Link to="/Mercearia"><SidebarItem Icon={PiBowlFoodBold} Text="Mercearia"/></Link>
+  <Link to="/Limpeza"><SidebarItem Icon={MdCleaningServices} Text="Limpeza"/></Link>
+  <Link to="/Congelados"><SidebarItem Icon={IoIceCreamOutline} Text="Congelados"/></Link>
+  <Link to="/saude"><SidebarItem Icon={MdOutlineHealthAndSafety} Text="Saúde"/></Link>
+  <Link to="/Animais"><SidebarItem Icon={LuCat} Text="Animais"/></Link>
+  <Link to="/padaria"><SidebarItem Icon={GiSlicedBread} Text="Padaria"/></Link>
+  <Link to="/Organicos"><SidebarItem Icon={PiLeafBold} Text="Organicos"/></Link>
   </Content>
 </ConteinerSidebar>
 

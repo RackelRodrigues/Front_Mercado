@@ -60,7 +60,8 @@ const Home = () => {
           <BsPersonCircle size={30} color="#222"/>
           </Link>
       </Svg>
-        <Link to="/Carrinho">
+      
+        <Link to="/Meu Carrinho">
           <FiShoppingCart size={30} color="#222"/>
           </Link>
      

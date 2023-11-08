@@ -94,7 +94,32 @@ align-items: center;
 justify-content: center;
 margin-left: 10PX;
 margin-top: 5px;
-
 }
  `;
+
+
+
+export const Removebutton = styled.button`
+width: 125px;
+height: 25px;
+background-color: #1D4ED8;
+color : #fff;
+border-radius: 10px;
+display: flex;
+align-items: center;
+justify-content: center;
+position: relative;
+top: -33%;
+right: -15%;
+
+
+&:hover{
+    background-color: #205D9E;
+
+}
+`;
+
+
+
+
 

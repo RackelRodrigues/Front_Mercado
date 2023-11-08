@@ -7,4 +7,3 @@ export const ContainerLogin = styled.div`
 
 
 `;
-

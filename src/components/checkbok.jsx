@@ -18,3 +18,19 @@ display: flex;
 
 
 `;
+
+
+export const CheckboxCarrinho = styled.input`
+display: none;
+border-radius: 50%;
+background-color: #FFF;
+
+`;
+
+
+export const Labelcheckbok = styled.label`
+ font-family: 'Lato', sem serifa;
+ font-weight: 200;
+ font-size: 17px;
+cursor: pointer;
+`;

@@ -2,6 +2,7 @@
 margin: 0;
 padding: 0;
 box-sizing: 0;
+background-size: cover;
 }
 
 
@@ -9,5 +10,6 @@ box-sizing: 0;
 body{
   background-color: #ffffff;
   justify-content: center;
+  
   
 }

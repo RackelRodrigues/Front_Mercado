@@ -21,7 +21,6 @@ margin: 30px
 `;
 
 const Divimg = Styled.div`
-
 display: flex;
 justify-content: center;
 align-items: center;
