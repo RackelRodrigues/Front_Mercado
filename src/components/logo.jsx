@@ -28,12 +28,6 @@ position: relative;
 
 
 
-export const AtencaoImg = styled.img`
-
-
-`;
-
-
 export const Carrinhoimg = styled.img`
  width: 200px;
  max-width: 100%;
@@ -54,3 +48,11 @@ export const ProdutoCarrinhoimg = styled.img`
  top: 13%;
  margin: 10px;
 `;
+
+
+export const ImagemTitulo = styled.img`
+width: 120px;
+height: 120px;
+max-width: 100%;
+`;
+

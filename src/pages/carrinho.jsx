@@ -1,20 +1,22 @@
 import { LinkCarrinho, DivisaoCarrinho, DivisaoPontochave, DivisaoPontochave2  } from "../components/linkstyle";
 import {Link} from "react-router-dom";
 import {AiOutlineArrowLeft} from 'react-icons/ai';
-import { TitleCarrinho, TitlePontoChave, TitlesMetodo } from "../components/titles";
+import { TitleCarrinho, TitlePontoChave, TitlesMetodo , Titlesquantidade, Titlesquantidade2, Titlesquantidade3} from "../components/titles";
 import Styled from 'styled-components';
 import Carrinho from '../images/carrinho.png';
 import { Carrinhoimg } from "../components/logo";
 import {PontoChave, MetodosCarrinho} from "../components/Boxcarrinho";
 import Boxcarrinho from "../components/Boxcarrinho";
 import Itens from "../components/itens";
-
+import CheckbokCarrinho from '../components/checkbok';
+import { useState } from "react";
 
 const BoxAlinhamento = Styled.div`
 position: relative;
-margin-top: 300px;
+margin-top: 150px;
 left: -30%;
 width: 864px;
+
 `;
 
 const DivTitle = Styled.div`
@@ -23,21 +25,38 @@ margin: 30px;
 display: block;
 
 `;
-
-
-const Divcontinue = Styled.div`
-display: flex;
-justify-content: flex-start;
-align-items: center;
-
-
+const Divbaixo = Styled.div`
+height: 70px;
+width: 70px;
 
 `;
 
 
-const MeuCarrinho = ()=>{
-    return(
 
+const Divcontinue = Styled.div`
+position: relative;
+right: 200px;
+
+>:nth-child(1){
+    display: flex;
+    align-items: center;
+}
+
+`;
+
+
+
+
+
+const MeuCarrinho = ()=>{
+
+    const [selectedOption, setSelectedOption] = useState();
+      
+    const handleCheckboxChange = (option) => {
+        console.log("Option selected:", option); 
+      setSelectedOption(option);
+    };
+    return(
     <>
   
 <DivTitle>
@@ -46,6 +65,13 @@ const MeuCarrinho = ()=>{
 </DivTitle>
 
 <DivisaoCarrinho></DivisaoCarrinho>
+
+
+<Titlesquantidade>Produtos</Titlesquantidade>
+
+<Titlesquantidade2>Quantidade</Titlesquantidade2>
+
+<Titlesquantidade3>Valor</Titlesquantidade3>
 
 <BoxAlinhamento>
 <Boxcarrinho
@@ -93,9 +119,38 @@ QuantidadePecas="4"
 <TitlesMetodo>Metodo de Pagamento</TitlesMetodo>
 
 <MetodosCarrinho>
+<CheckbokCarrinho
+ NomeCarrinho='Boleto bancario'
+ Imgpagamento="https://i.ibb.co/VvhyGXM/boleto.jpg"
+ checked={selectedOption === 'Boleto bancario'}
+ onChange={() => handleCheckboxChange('Boleto bancario')}
+/>
+<CheckbokCarrinho
+ NomeCarrinho="Pix"
+ Imgpagamento="https://i.ibb.co/xqyMnFV/pix.png"
+ checked={selectedOption === 'Pix'}
+ onChange={() => handleCheckboxChange('Pix')}
+/>
+<CheckbokCarrinho
+ NomeCarrinho="transferencia Bancária"
+ Imgpagamento="https://i.ibb.co/TPy3Tv0/transferencia.jpg"
+ checked={selectedOption === 'Transferencia Bancaria'}
+ onChange={() => handleCheckboxChange('Transferencia Bancaria')}
+
+/>
+<CheckbokCarrinho
+ NomeCarrinho="Cartão de Credito"
+ Imgpagamento="https://i.ibb.co/rHPJSCL/cart-o.jpg"
+
+ checked={selectedOption === 'Cartão de Credito'}
+ onChange={() => handleCheckboxChange('Cartão de Credito')}
+/>
 </MetodosCarrinho>
 
 <DivisaoPontochave2/>
+
+<Divbaixo/>
+
 
  <Itens 
  TituloPreço="SubTotal:"
@@ -105,8 +160,10 @@ QuantidadePecas="4"
 </PontoChave>
 
   <Divcontinue>
+
     <AiOutlineArrowLeft size={20} color="#3B9EFF"/>
     <Link to="/Home"><LinkCarrinho> Continue Comprando</LinkCarrinho></Link>
+    
 </Divcontinue>
    </>
 

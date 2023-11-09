@@ -122,3 +122,61 @@ justify-content: center;
 margin-top: 10px;
 margin-bottom: 10px;
 `;
+
+
+export const Titlesquantidade = styled.p`
+ font-family: 'Lato', sem serifa;
+ font-weight: 100;
+ font-size: 18px;
+ color: #000000;
+ position: relative;
+ top: 195px;
+ right: 210px;
+
+`;
+
+
+export const Titlesquantidade2 =styled.p`
+ font-family: 'Lato', sem serifa;
+ font-weight: 100;
+ font-size: 18px;
+ color: #000000;
+ position: relative;
+ top: 165px;
+ right: -240px;
+
+
+`;
+
+export const Titlesquantidade3 = styled.p`
+ font-family: 'Lato', sem serifa;
+ font-weight: 100;
+ font-size: 18px;
+ color: #000000;
+ position: relative;
+ top: 139px;
+ right: -480px;
+
+
+
+`;
+
+export const TitleCategory = styled.h2`
+ font-family: 'Lato', sem serifa;
+ font-weight: bold;
+ font-size: 27px;
+ color: #000000;
+ margin-right: 10px;
+`;
+
+
+export const TitleConteiner = styled.div`
+display: flex;
+align-items:center;
+top: -0;
+width: 200px;
+height: 200px;
+margin-top: 70px;
+
+
+`;

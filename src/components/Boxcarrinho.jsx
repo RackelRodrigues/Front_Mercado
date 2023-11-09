@@ -5,12 +5,8 @@ import { Titleprecocarrinho, TitleTotalcarrinho, Produto1} from "./titles";
 
 
 export const MetodosCarrinho = Styled.div`
-width: 405px;
-height: 69px;
-background-color: #fff;
-display: flex;
-align-items: center;
-align-self: center;
+width: 448px;
+margin-top: 40px;
 
 `;
 

@@ -2,7 +2,7 @@ import { Headerhome } from "../components/HeaderStyle";
 import  Styled  from "styled-components";
 import { GiHamburgerMenu } from "react-icons/gi";
 import {BiSearch} from "react-icons/bi"
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import Sidebar from "../components/Sidebar";
 import {FiShoppingCart} from "react-icons/fi"
 import { ConteinerHome } from "../components/HeaderStyle";
@@ -31,7 +31,7 @@ const BoxHome = Styled.div`
 
 
 
-const DivHome = Styled.div`
+export const DivHome = Styled.div`
 background-color: #ffff;
 
 

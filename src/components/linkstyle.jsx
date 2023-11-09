@@ -79,18 +79,19 @@ export const LinkCarrinho = styled.a`
  font-size: 17px;
  color: #3B9EFF;
  text-decoration: none;
- display: flex;
-justify-content: flex-start;
-align-items: flex-start;
-
+position: relative;
+top:-23px;
+right: -26px;
 
  &:hover{
   color: #3B9EFF;
  }
 
->svg{
-  display: flex;
-justify-content: flex-start;
+>:nth-child(1){
+display: flex;
+justify-content: center;
+align-items: center;
+
 }
 
 `;

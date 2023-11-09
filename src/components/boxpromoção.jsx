@@ -17,7 +17,6 @@ justify-content: center;
 
 export const ImgProduto = Styled.img`
 width: 300px;
-heigth: 175px;
 background-color: #fff;
 display: flex;
 justify-content: center;
@@ -33,8 +32,8 @@ color: #E54D2E;
 margin-right: 60px;
 margin-left: 10px;
 
-
 `;
+
 const Precopromoçao = Styled.p`
 font-weight: 400;
 font-family: 'Lato', sem serifa;
@@ -69,13 +68,14 @@ background-color: #fff;
 `;
 
 
-const ConteinerProduto = Styled.div`
+  const ConteinerProduto = Styled.div`
  width: 300px;
  height: 300px;
  background-color: #ffff;
  margin-top: 150px;
  cursor: pointer;
  max-width: 300px;
+
  
 `;
 
