@@ -11,6 +11,7 @@ import Itens from "../components/itens";
 import CheckbokCarrinho from '../components/checkbok';
 import { useState } from "react";
 
+
 const BoxAlinhamento = Styled.div`
 position: relative;
 margin-top: 150px;
@@ -49,13 +50,15 @@ right: 200px;
 
 
 const MeuCarrinho = ()=>{
-
+    
+    const [carrinho, setCarrinho] = useState([])
+    //para selecionar a opção de pagamento
     const [selectedOption, setSelectedOption] = useState();
-      
     const handleCheckboxChange = (option) => {
         console.log("Option selected:", option); 
       setSelectedOption(option);
     };
+    
     return(
     <>
   

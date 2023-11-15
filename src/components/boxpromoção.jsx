@@ -1,6 +1,6 @@
 import  Styled from "styled-components";
 import {ButtonAdicione} from './buttonstyle'
-
+import { useState } from "react";
 
 
 
@@ -90,8 +90,12 @@ margin-bottom: 10px;
 `;
 
 const Boxpromocao = ({Desconto, Descricao, Precopromo, Precoreal, SrcReal}) =>{
-    return(
+    // Adicione a lógica para adicionar ao carrinho
+ 
+
+  return(
   <>
+ 
     <ConteinerProduto>
     <ImgProduto src={SrcReal}  alt="promoção 1"/>
     <DescricaoProduto>{Descricao}</DescricaoProduto>
@@ -99,10 +103,11 @@ const Boxpromocao = ({Desconto, Descricao, Precopromo, Precoreal, SrcReal}) =>{
     <Conteinerprecos>
     <DescontoProduto>{Desconto}</DescontoProduto>
     <Preco>{Precoreal}</Preco>
-    
+  
     </Conteinerprecos>
-    <ButtonAdicione> Adicione ao carrinho</ButtonAdicione>
+    <ButtonAdicione  >Adicione ao carrinho</ButtonAdicione>
    </ConteinerProduto>
+ 
 </>
 
 

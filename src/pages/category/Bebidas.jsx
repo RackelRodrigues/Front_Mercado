@@ -8,7 +8,7 @@ import {BsPersonCircle} from "react-icons/bs";
 import { Link } from "react-router-dom";
 import{Boxinputheader, InputHeader} from "../../components/Inputstyle";
 import { Svg } from "../../components/Sidebar";
-import { useState } from "react";
+import { useState, useEffect} from "react";
 import { TitleCategory, TitleConteiner } from "../../components/titles";
 import BoxProdutos from '../../components/BoxProdutos'
 import { DivProdutos } from '../../components/BoxProdutos';
@@ -19,6 +19,29 @@ const Bebidas = ()=>{
 const [sidebar, setSidebar] = useState(false)
 
 const ShowSidebar = () => setSidebar (!sidebar)
+
+const [bebidas, setBebidas] = useState([]);
+
+  useEffect(() => {
+    const fetchbebidas= async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/buscar_bebidas', {
+          method: 'GET',  // ou qualquer outro método que você precise
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',  // Isso é equivalente a withCredentials: true
+        });
+  
+        const data = await response.json();
+        setBebidas(data);
+      } catch (error) {
+        console.error('Erro ao buscar produtos:', error);
+      }
+    };
+  
+    fetchbebidas();
+  }, []);
 
   return(
 <>
@@ -48,31 +71,23 @@ const ShowSidebar = () => setSidebar (!sidebar)
         </Headerhome>
 
       
-
+      
 <TitleConteiner>
 <ImagemTitulo src="https://i.ibb.co/2sH08v4/Bebidas.jpg" alt="Logo Bebidas"/>
 <TitleCategory>Bebidas</TitleCategory>
 </TitleConteiner>
 
    <DivProdutos>
+    
+    {bebidas.slice(0, 3).map((bebidas)=>(
 <BoxProdutos
- ImgSrc="https://i.ibb.co/RpHgq8Z/coca.jpg"
- DescricaoProduto="Coca-cola"
-PrecoProduto="R$12,11"
+ ImgSrc="https://i.ibb.co/NLtRPrW/vinho-cabernet-sauvignon-casillero-del-diablo-750ml-28fa1dc6-cde1-41e9-a116-99a239427963.jpg"
+ DescricaoProduto={bebidas.nome}
+ PrecoProduto={bebidas.descricao}
  />
+  ))}
    
-<BoxProdutos
-ImgSrc="https://i.ibb.co/RpHgq8Z/coca.jpg"
-DescricaoProduto="Coca-cola"
-PrecoProduto="R$12,11"
-/>
 
-   
-<BoxProdutos
- ImgSrc="https://i.ibb.co/RpHgq8Z/coca.jpg"
- DescricaoProduto="Coca-cola"
-PrecoProduto="R$12,11"
- />
 </DivProdutos>
 
 

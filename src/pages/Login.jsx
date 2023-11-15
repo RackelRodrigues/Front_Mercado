@@ -11,12 +11,55 @@ import {Linkstyle, BlueSpan, ContainerIncreva} from '../components/linkstyle';
 import Caipira from '../images/Caipira.png';
 import {Checkbok, Containercheckbok} from '../components/checkbok'
 import {Link} from "react-router-dom";
+import { useState } from 'react';
+import axios from 'axios';
 
 
 
 
 
 const Login = () =>{
+  const [loginData, setLoginData] = useState({
+    username: '',
+    password: '',
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setLoginData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+    console.log(`Campo ${name} alterado para:`, value);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+
+    try {
+      const response = await axios.post(
+        'http://localhost:5000/api/login', 
+        JSON.stringify(loginData),
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        }
+      );
+
+      // Lógica para lidar com a resposta do servidor
+      if (response.status === 200) {
+        console.log('Login bem-sucedido:', response.data);
+      } else {
+        console.error('Resposta do servidor não foi bem-sucedida:', response.status);
+      }
+    } catch (error) {
+      console.error('Erro na requisição:', error.message);
+    }
+  };
+
   return(
 <>
 
@@ -29,7 +72,13 @@ const Login = () =>{
     <TitleH3>Endereço e-mail</TitleH3>
 
     <DivInput>
-    <Inputstyle type='text' placeholder='Digite seu Usuario'/>
+    <Inputstyle 
+    type='email' 
+    name='username'
+    placeholder='Digite seu Email'
+    value={loginData.username}
+    onChange={handleChange}
+    />
     <BsPerson size={30} color="#000000"/>
     </DivInput>
 
@@ -37,7 +86,13 @@ const Login = () =>{
    <TitleH3>Senha</TitleH3>
 
    <DivInput>
-    <Inputstyle type='text' placeholder='Digite sua senha'/>
+    <Inputstyle 
+    type='password' 
+    placeholder='Digite sua senha'
+    name='password'
+    value={loginData.password}
+    onChange={handleChange}
+    />
     <BiLockAlt size={30} color="#000000"/>
    </DivInput>
 
@@ -51,7 +106,7 @@ const Login = () =>{
 </Divconteiner>
 
 <ContainerButton>
-<Buttonsend>Entrar</Buttonsend>
+<Buttonsend onClick={handleSubmit}>Entrar</Buttonsend>
 </ContainerButton>
 
 <ContainerIncreva>

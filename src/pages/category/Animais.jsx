@@ -1,5 +1,5 @@
 import { ImagemTitulo } from '../../components/logo';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { GiHamburgerMenu } from "react-icons/gi";
 import {BiSearch} from "react-icons/bi"
 import Sidebar from "../../components/Sidebar";
@@ -20,6 +20,28 @@ const Animais = () =>{
   const [sidebar, setSidebar] = useState(false)
 
   const ShowSidebar = () => setSidebar (!sidebar)
+
+  const [animais, setAnimais] = useState([]);
+
+  useEffect(() => {
+    const fetchanimais= async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/buscar_animais', {
+          method: 'GET',  // ou qualquer outro método que você precise
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',  // Isso é equivalente a withCredentials: true
+        });
+  
+        const data = await response.json();
+        setAnimais(data);
+      } catch (error) {
+        console.error('Erro ao buscar produtos:', error);
+      }
+    };
+    fetchanimais();
+  }, []);
 
     return(
 <>

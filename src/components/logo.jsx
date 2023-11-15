@@ -56,3 +56,14 @@ height: 120px;
 max-width: 100%;
 `;
 
+
+
+export const ImgUser = styled.img`
+width: 250px;
+height: 250px;
+max-width: 100%;
+position: relative;
+top: 50px;
+right: 50%;
+left: 33%;
+`;

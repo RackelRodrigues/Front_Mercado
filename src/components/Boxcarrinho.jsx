@@ -2,6 +2,7 @@ import Styled from "styled-components"
 import { Removebutton } from "./buttonstyle";
 import { ProdutoCarrinhoimg } from "./logo";
 import { Titleprecocarrinho, TitleTotalcarrinho, Produto1} from "./titles";
+import { useState } from "react";
 
 
 export const MetodosCarrinho = Styled.div`
@@ -39,14 +40,23 @@ export const MetodoPag = Styled.div`
 
 const Boxcarrinho =({SrcFoto, Preco, TotalProduto, TituloProduto})=>{
 
+    const [carrinho, setCarrinho] = useState([])
+
+
+    const removerDoCarrinho = (index) => {
+        const novoCarrinho = [...carrinho];
+        novoCarrinho.splice(index, 1);
+        setCarrinho(novoCarrinho);
+        console.log(carrinho)
+      };
     return (
         <>
         <BoxProdutosCarrinho>
          <ProdutoCarrinhoimg src={SrcFoto} alt="Produto"/>
          <Produto1>{TituloProduto}</Produto1>
-         <Removebutton>Remove</Removebutton>
+         <Removebutton onClick={removerDoCarrinho}>Remove</Removebutton>
          <Titleprecocarrinho>{Preco}</Titleprecocarrinho>
-         <TitleTotalcarrinho>{TotalProduto}</TitleTotalcarrinho>
+         <TitleTotalcarrinho >{TotalProduto}</TitleTotalcarrinho>
 
         </BoxProdutosCarrinho>
         

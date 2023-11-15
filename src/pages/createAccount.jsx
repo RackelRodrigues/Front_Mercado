@@ -1,87 +1,58 @@
 import { TitleH2 } from '../components/titles';
-import { DivInput, Divconteinerstyle, Divtermos } from '../components/divInput';
+import { DivInput, Divconteinerstyle } from '../components/divInput';
 import { Inputstyle } from '../components/Inputstyle';
 import {LinkA, DivApi, Form} from '../components/links'
 import { Buttonsend, ContainerButton, ButtonLogin} from '../components/buttonstyle';
 import { BsTelephone, BsPerson, } from "react-icons/bs";
-import { BiLockOpenAlt, BiLockAlt, BiLogoFacebookSquare} from "react-icons/bi";
-import {AiOutlineMail, AiFillLinkedin} from "react-icons/ai";
-import { GrHomeRounded } from "react-icons/gr";
-import {FcGoogle} from "react-icons/fc";
 import {Header} from '../components/HeaderStyle';
-import {Divisao, DivisaoContainer, BlueSpan} from '../components/linkstyle';
-import { Checkbok} from '../components/checkbok';
-import {LabelStyle2} from '../components/labelstyle';
+import {Divisao, DivisaoContainer} from '../components/linkstyle';
+import { ImgUser } from '../components/logo';
+import { BiLockOpenAlt, BiLockAlt} from "react-icons/bi";
+import {AiOutlineMail} from "react-icons/ai";
+import axios from 'axios';
 import {Link} from "react-router-dom";
+import { GrHomeRounded } from "react-icons/gr";
 import { useState } from 'react';
+import  {  GoogleOAuthProvider, GoogleLogin   }from '@react-oauth/google' ;
+
 
 
 
 const CreateAccount = () =>{
 
-  const [user, setUser] = useState({nome:'', email:'',cpf:'', telefone:'', confirme:'',senha:''})
-  const [address, setAddress] = useState({rua: '', bairro: '', numero: '', cep:''}) 
+  const [user, setUser] = useState({nome:'', email:'',cpf:'', telefone:'',senha:''})
+  
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setUser({ ...user, [name]: value });
+    setUser((prevUser) => {
+      const updatedUser = { ...prevUser, [name]: value };
+      console.log('User:', updatedUser);
+      return updatedUser;
+    });
   };
 
-  const handleChange2 = (e) => {
-    const { name, value } = e.target;
-    setAddress({ ...adress, [name]: value });
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    fetch('/add/user', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(user),
-    })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.log(data);
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    
-    });
-  
-      fetch('/add/address', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(address),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
-        })
-        .then((data) => {
-          console.log(data);
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-          // Você pode lidar com o erro aqui, como exibir uma mensagem de erro para o usuário.
+    try {
+        const responseUser = await axios.post('http://127.0.0.1:5000/add/user', JSON.stringify(user),{
+           headers:{
+             'Content-Type': 'application/json'
+           },
+           withCredentials: true, 
         });
-      
-      
-      
-      
-
+        
+       
+      // Imprimir as respostas (opcional)
+      console.log('Response User:', responseUser.data);
+    } catch (error) {
+      console.error('Erro na requisição:', error.message);
+    }
   };
+
+  
 
 return (
     <>
@@ -95,17 +66,23 @@ return (
 </Link>
 </Header>
     
-
+<ImgUser
+src='https://i.ibb.co/hXLbPJW/Design-sem-nome-2.jpg'
+/>
 
 <TitleH2>Create your Account</TitleH2>
 
 <DivApi>
-
-<Link to="/"><BiLogoFacebookSquare size={35} color='#3b5998'/></Link>
-
-<Link to="/"><FcGoogle size={35} /></Link>
-
-<Link to="/"><AiFillLinkedin size={35} color='#0e76a8'/></Link>
+<GoogleOAuthProvider clientId ="634127394492-gg2eah5se7ncabtnaovb4hpies130b8j.apps.googleusercontent.com">
+    <GoogleLogin 
+      onSuccess={credentialResponse => { 
+        console.log(credentialResponse);
+      }} 
+      onError={() => { 
+        console.log('Falha no login');
+      }} 
+    />
+  </GoogleOAuthProvider>
 
 </DivApi>
 <DivisaoContainer>
@@ -113,6 +90,7 @@ return (
 </DivisaoContainer>
 
 <Form onSubmit={handleSubmit}>
+
   
 <Divconteinerstyle>
 <DivInput>
@@ -142,44 +120,9 @@ return (
 />
 <AiOutlineMail size={30} color='#000000'/>
 </DivInput>
-</Divconteinerstyle>
-
-
-
-<TitleH2>Address</TitleH2>
-
-<Divconteinerstyle >
 <DivInput>
-<Inputstyle type='text' placeholder='Rua'  name="rua"
-value={address.rua} onChange={handleChange2}
-/>
-<GrHomeRounded size={25} color='#000000'/>
-</DivInput>
+<Inputstyle type='text' placeholder='Digite sua melhor senha' 
 
-<DivInput>
-<Inputstyle type='text' placeholder='Bairro'  name="bairro"
-value={address.bairro} onChange={handleChange2}
-/>
-<GrHomeRounded size={25} color='#000000'/>
-</DivInput>
-
-<DivInput>
-<Inputstyle type='text' placeholder='Numero'  name="numero"
-value={address.numero} onChange={handleChange2}
-/>
-</DivInput>
-
-<DivInput>
-<Inputstyle type='text' placeholder='Cep'  name="cep"
-
-value={address.cep} onChange={handleChange2}
-/>
-<GrHomeRounded size={25} color='#000000'/>
-</DivInput>
-
-<DivInput>
-<Inputstyle type='text' placeholder='Digite sua melhor senha' name='confirme'
-value={user.confirme} onChange={handleChange}
 />
 <BiLockOpenAlt size={30} color='#000000'/>
 </DivInput>
@@ -191,17 +134,11 @@ value={user.senha} onChange={handleChange}
 />
 <BiLockAlt size={30} color='#000000'/>
 </DivInput>
-
-
 </Divconteinerstyle>
 
-<Divtermos>
-<Checkbok type='checkbox'/>
-<LabelStyle2>concordo com os termos de <BlueSpan>serviço</BlueSpan> e <BlueSpan>política de privacidade</BlueSpan></LabelStyle2>
-</Divtermos>
 
 <ContainerButton>
-<Buttonsend type="submit">Criar Conta</Buttonsend>
+<Link to="/Address"><Buttonsend type="submit">continue</Buttonsend></Link>
 </ContainerButton>
 
 </Form>

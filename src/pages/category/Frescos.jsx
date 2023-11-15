@@ -9,14 +9,38 @@ import { Link } from "react-router-dom";
 import{Boxinputheader, InputHeader} from "../../components/Inputstyle";
 import { Svg } from "../../components/Sidebar";
 import { TitleCategory, TitleConteiner } from "../../components/titles";
-import { useState } from "react";
-import { divProdutos } from '../../components/BoxProdutos';
+import { useState,useEffect } from "react";
+import { DivProdutos } from '../../components/BoxProdutos';
+import BoxProdutos from '../../components/BoxProdutos'
 
 
 const Frescos = ()=>{
     const [sidebar, setSidebar] = useState(false)
 
     const ShowSidebar = () => setSidebar (!sidebar)
+
+    const [frescos, setFrescos] = useState([]);
+
+  useEffect(() => {
+    const fetchfrescoa= async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/buscar_frescos', {
+          method: 'GET',  // ou qualquer outro método que você precise
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',  // Isso é equivalente a withCredentials: true
+        });
+  
+        const data = await response.json();
+        setFrescos(data);
+      } catch (error) {
+        console.error('Erro ao buscar produtos:', error);
+      }
+    };
+  
+    fetchbebidas();
+  }, []);
     
 
     return(
@@ -54,6 +78,19 @@ const Frescos = ()=>{
    <ImagemTitulo src="https://i.ibb.co/VL3ry6j/Frescos.jpg" alt="Logo hiegine"/>
    <TitleCategory>Frescos</TitleCategory>
   </TitleConteiner>
+
+<DivProdutos>
+  {frescos.slice(0, 3).map((frescos)=>(
+<BoxProdutos
+ ImgSrc="https://i.ibb.co/nDHt53T/pizza-portuguesa-seara.jpg"
+ DescricaoProduto={frescos.nome}
+ PrecoProduto={frescos.descricao}
+
+ />
+  ))}
+  </DivProdutos>
+
+
 </>
 
 

@@ -37,6 +37,15 @@ class Produtos(BaseModel):
     quantidade = IntegerField()
 
 
+
+class Carrinho(BaseModel):
+    usuario = ForeignKeyField(Usuarios, backref='carrinho', on_delete='SET NULL')
+    criadoEm = DateTimeField(constraints=[SQL('DEFAULT CURRENT_TIMESTAMP')])
+    modificadoEm = DateTimeField(constraints=[SQL('DEFAULT CURRENT_TIMESTAMP')])
+
+
+
+
 #class Historico_Precos(BaseModel):
     ##id_produto = ForeignKeyField(Produtos, backref='Historico_Precos')
     #valor = IntegerField()
@@ -53,5 +62,5 @@ class Produtos(BaseModel):
 
 
 db.connect()
-db.create_tables([Usuarios,Produtos,Enderecos,Categoria])
+db.create_tables([Usuarios,Produtos,Enderecos,Categoria,Carrinho])
 db.close()

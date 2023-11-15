@@ -9,8 +9,9 @@ import { Link } from "react-router-dom";
 import{Boxinputheader, InputHeader} from "../../components/Inputstyle";
 import { Svg } from "../../components/Sidebar";
 import { TitleCategory, TitleConteiner } from "../../components/titles";
-import { useState } from "react";
+import { useState, useEffect} from "react";
 import { DivProdutos } from '../../components/BoxProdutos';
+import BoxProdutos from '../../components/BoxProdutos'
 
 
 
@@ -19,6 +20,28 @@ const Higiene = ()=>{
     const [sidebar, setSidebar] = useState(false)
 
     const ShowSidebar = () => setSidebar (!sidebar)
+
+    const [higiene, setHigiene] = useState([]);
+
+  useEffect(() => {
+    const fetchhigiene= async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/buscar_higine', {
+          method: 'GET',  // ou qualquer outro método que você precise
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',  // Isso é equivalente a withCredentials: true
+        });
+  
+        const data = await response.json();
+        setHigiene(data);
+      } catch (error) {
+        console.error('Erro ao buscar produtos:', error);
+      }
+    };
+    fetchhigiene();
+  }, []);
     
 
     return(
@@ -63,7 +86,13 @@ const Higiene = ()=>{
 <DivProdutos>
 
 
-
+{higiene.slice(0, 3).map((higiene)=>(
+<BoxProdutos
+ ImgSrc="https://i.ibb.co/WcWXH6p/nivea-sabonete.jpg"
+ DescricaoProduto={higiene.nome}
+ PrecoProduto={higiene.descricao}
+ />
+ ))}
   
 </DivProdutos>
 

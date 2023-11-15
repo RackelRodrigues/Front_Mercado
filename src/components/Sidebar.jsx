@@ -7,6 +7,7 @@ import { GiFruitBowl, GiSlicedBread } from "react-icons/gi";
 import { PiBowlFoodBold, PiLeafBold } from "react-icons/pi";
 import {  IoIceCreamOutline } from "react-icons/io5";
 import { LuCat } from "react-icons/lu";
+import { GrHomeRounded } from "react-icons/gr";
 import { Link } from "react-router-dom";
 
 const ConteinerSidebar= styled.div`
@@ -96,7 +97,7 @@ const Sidebar =({ active}) =>{
   <AiOutlineClose size={30} color="#222" onClick={Closesidebar}/>
 
   <Content>
-
+  <Link to="/Home"><SidebarItem Icon={GrHomeRounded} Text="Home"/></Link>
   <Link to="/Bebidas"><SidebarItem Icon={BiSolidDrink} Text="Bebidas"/></Link>
   <Link to="/Higiene"><SidebarItem Icon={MdCleanHands} Text="Higiene"/></Link>
   <Link to="/Frescos"><SidebarItem Icon={GiFruitBowl} Text="Frescos"/></Link>

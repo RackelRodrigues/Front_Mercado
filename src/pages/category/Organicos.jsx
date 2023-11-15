@@ -10,7 +10,7 @@ import{Boxinputheader, InputHeader} from "../../components/Inputstyle";
 import { Svg } from "../../components/Sidebar";
 import { TitleCategory, TitleConteiner } from "../../components/titles";
 import { useState } from "react";
-import { divProdutos } from '../../components/BoxProdutos';
+import { DivProdutos } from '../../components/BoxProdutos';
 
 
 const Organicos = ()=>{
@@ -61,7 +61,7 @@ const Organicos = ()=>{
 
 
 <divProdutos>
-  
+
 </divProdutos>
 
 

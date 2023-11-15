@@ -19,6 +19,7 @@ import Mercearia from './pages/category/Mercearia.jsx'
 import Organicos from './pages/category/Organicos.jsx'
 import Padaria from './pages/category/Padaria.jsx'
 import Saude from './pages/category/saude.jsx'
+import Addressdata from './pages/Addressdata.jsx'
 
 
 
@@ -32,10 +33,10 @@ const router =  createBrowserRouter ([
     element:<App/>,
     errorElement: <Errorpage/>, 
     children:[
-      {
+    {
         path: "Home",
         element: <Home/>,
-      },
+  },
       
   {
     path: "Login",
@@ -44,6 +45,10 @@ const router =  createBrowserRouter ([
   {
     path: "Create account",
     element: <CreateAccount/>,
+  },
+  {
+    path: "Address",
+    element: <Addressdata/>,
   },
   {
     path: "Meu Carrinho",

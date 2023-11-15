@@ -37,26 +37,23 @@ justify-content: center;
 margin-bottom: 10px;
 `;
 const ConteinerProdutos = styled.div`
-width: 300px;
-height: 300px;
+width: 250px;
+height: 250px;
 background-color: #ffff;
 margin-top: 150px;
 cursor: pointer;
 max-width: 300px;
+margin-bottom: 30px;
 
 
 `;
 
-export const divProdutos = styled.div`
+export const DivProdutos = styled.div`
 display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-gap: 40px;
-  justify-content: center;
-  align-items: center;
-  padding: 30px;
-  background-color: #fff;
-  margin-bottom: 20px;
-  margin: 0 auto;
+height: 100%;
+
 
 `;
 
@@ -67,7 +64,7 @@ const BoxProdutos = ({ImgSrc, DescricaoProduto, PrecoProduto}) =>{
     <ImgProdutos src={ImgSrc} alt="fotos produtos"/>
     <DescricaoProdutos>{DescricaoProduto}</DescricaoProdutos>
     <PrecoProdutos>{PrecoProduto}</PrecoProdutos>
-    <ButtonAdicione>Adcione ao Carrinho</ButtonAdicione>
+    <ButtonAdicione >Adcione ao Carrinho</ButtonAdicione>
     </ConteinerProdutos>
     
     
