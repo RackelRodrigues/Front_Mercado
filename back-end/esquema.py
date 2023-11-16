@@ -1,5 +1,6 @@
-from peewee import (PostgresqlDatabase, Model, TextField, 
-                    IntegerField, ForeignKeyField, DateTimeField)
+from peewee import *
+
+
 
 db = PostgresqlDatabase('mercadinho_online',port=5432,user='postgres',password='875838')
 
@@ -16,7 +17,6 @@ class Usuarios(BaseModel):
     email = TextField(unique=True)
     cpf = TextField(unique=True)
     telefone = IntegerField(unique=True)
-    confirme = TextField()
     senha = TextField()
 
 

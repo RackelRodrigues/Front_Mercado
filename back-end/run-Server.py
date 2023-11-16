@@ -163,10 +163,11 @@ def addCategory():
         return jsonify(error_message), 400
 
 #################################################
-
+CORS(app, resources={r"/api/login": {"origins": "http://localhost:5173/Login", "supports_credentials": True}})
 
 @app.route('/api/login', methods=['POST'])
 def login():
+   
     try:
         data = request.get_json()
         username = data.get('email')  # Evitar KeyError usando get()
@@ -196,6 +197,7 @@ def login():
 
     except Exception as e:
         error_message = {"error": str(e)}
+        print(f"Erro interno no servidor: {str(e)}")
         return jsonify(error_message), 500
     
 
@@ -328,17 +330,63 @@ def buscar_animais():
 @app.route('/api/buscar_limpeza', methods=['GET'])
 def buscar_limpeza():
     try:
-        
         limpeza = Limpeza.select()
-
-       
-       Limpeza_dict = [model_to_dict(Limpeza) for Limpeza in limpeza]
-
-       return jsonify(Limpeza_dict), 200
+        limpeza_dict = [model_to_dict(limpeza_item) for limpeza_item in limpeza]
+        return jsonify(limpeza_dict), 200
 
     except Exception as e:
         error_message = {"error": str(e)}
+        return jsonify(error_message), 500
+    
 
+
+@app.route('/api/buscar_mercearia', methods=['GET'])
+def buscar_mercearia():
+    try:
+        mercearia = Mercearia.select()
+        mercearia_dict = [model_to_dict(mercearia_item) for mercearia_item in mercearia]
+        return jsonify(mercearia_dict), 200
+
+    except Exception as e:
+        error_message = {"error": str(e)}
+        return jsonify(error_message), 500
+    
+
+@app.route('/api/buscar_organicos', methods=['GET'])
+def buscar_organicos():
+    try:
+        organicos = Organicos.select()
+        organicos_dict = [model_to_dict(organicos_item) for organicos_item in Organicos]
+        return jsonify(organicos_dict), 200
+
+    except Exception as e:
+        error_message = {"error": str(e)}
+        return jsonify(error_message), 500
+    
+
+    
+@app.route('/api/buscar_padaria', methods=['GET'])
+def buscar_padaria():
+    try:
+        padaria = Padaria.select()
+        Padaria_dict = [model_to_dict(padaria_item) for padaria_item in Padaria]
+        return jsonify(Padaria_dict), 200
+
+    except Exception as e:
+        error_message = {"error": str(e)}
+        return jsonify(error_message), 500
+    
+
+@app.route('/api/buscar_saude', methods=['GET'])
+def buscar_saude():
+    try:
+        saude = saude.select()
+        saude_dict = [model_to_dict(saude_item) for saude_item in saude]
+        return jsonify(saude_dict), 200
+
+    except Exception as e:
+        error_message = {"error": str(e)}
+        return jsonify(error_message), 500
 
 
 flow = InstalledAppFlow.from_client_config(
@@ -374,6 +422,35 @@ def callback():
     else:
         # Você pode retornar as informações dos arquivos ou os URLs de download, por exemplo
         return jsonify({'files': files})
+    
+
+@app.route('/api/buscar_produto', methods=['GET'])
+def buscar_produto():
+    try:
+        nome = request.args.get('nome')
+        categoria = request.args.get('categoria')
+        preco = request.args.get('preco')
+
+        # Construir a query inicial
+        query = Produtos.select().join(Categoria)
+
+        # Aplicar filtros conforme necessário
+        if nome:
+            query = query.where(Produtos.nome_produto.contains(nome))
+        if categoria:
+            query = query.where(Categoria.descricao == categoria)
+        if preco:
+            query = query.where(Produtos.valor == preco)
+
+        # Executar a query
+        produtos = query.dicts()
+
+        return jsonify(produtos), 200
+
+    except Exception as e:
+        print(f"Erro na busca de produtos: {e}")
+        error_message = {"error": str(e)}
+        return jsonify(error_message), 500
 
   
 @app.route('/')

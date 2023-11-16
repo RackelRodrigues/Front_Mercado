@@ -30,6 +30,7 @@ const Login = () =>{
       ...prevData,
       [name]: value,
     }));
+    console.log(loginData);
     console.log(`Campo ${name} alterado para:`, value);
   };
 
@@ -38,9 +39,7 @@ const Login = () =>{
   
 
     try {
-      const response = await axios.post(
-        'http://localhost:5000/api/login', 
-        JSON.stringify(loginData),
+      const response = await axios.post('http://localhost:5000/api/login', loginData,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -65,7 +64,9 @@ const Login = () =>{
 
 <ContainerLogin>
 <Logo>
+<Link to="/Home">
 <LogoImage src={Caipira} alt='logo do mercadinho'/>
+</Link>
 </Logo>
 
 
@@ -73,7 +74,7 @@ const Login = () =>{
 
     <DivInput>
     <Inputstyle 
-    type='email' 
+    type='username' 
     name='username'
     placeholder='Digite seu Email'
     value={loginData.username}

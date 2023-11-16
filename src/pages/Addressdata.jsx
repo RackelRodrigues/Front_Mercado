@@ -11,14 +11,15 @@ import {LabelStyle2} from '../components/labelstyle';
 import axios from 'axios';
 import {Link} from "react-router-dom";
 import { ImgUser } from '../components/logo';
-import { useState } from 'react';
-
+import { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Addressdata =()=>{
-    const [address, setAddress] = useState({rua: '', bairro: '', numero: '', cep:'', complemento:'', }) 
+    const [address, setAddress] = useState({rua: '', bairro: '', numero: '', cep:'', complemento:'', usuario_nome:''}) 
   
     const handleChange2 = (e) => {
       const { name, value } = e.target;
+      const updatedValue = name === 'numero' ? parseInt(value, 10) : value;
       setAddress((prevAddress) => {
         const updatedAddress = { ...prevAddress, [name]: value };
         console.log('Address:', updatedAddress);
@@ -26,18 +27,23 @@ const Addressdata =()=>{
       });
     };
   
+    
+    const navigate = useNavigate();
+
     const handleSubmit = async (e) => {
       e.preventDefault();
   
       try {
        
   
-        const responseAddress = await axios.post('http://localhost:5000/add/address', address,{
+        const responseAddress = await axios.post('http://127.0.0.1:5000/add/address', address,{
             headers:{
               "Content-Type":'application/json'
             },
             withCredentials: true,
         });
+
+        navigate('/Home');
          
         // Imprimir as respostas (opcional)
         console.log('Response Address:', responseAddress.data);
@@ -45,7 +51,22 @@ const Addressdata =()=>{
         console.error('Erro na requisição:', error.message);
       }
     };
-  
+    
+    const location = useLocation();
+    const user = location.state ? location.state.user : null;
+
+    useEffect(() => {
+      // Verifica se há dados do usuário no estado da localização
+      if (location.state && location.state.user) {
+        // Atualiza o estado do endereço com o nome do usuário
+        setAddress((prevAddress) => ({
+          ...prevAddress,
+          usuario_nome: location.state.user.nome
+        }));
+      }
+    }, [location.state]);
+
+
     return(
 <>
     <Header>
@@ -64,6 +85,7 @@ const Addressdata =()=>{
 
 
 <TitleH2>Address</TitleH2>
+
 <Form onSubmit={handleSubmit}>
 <Divconteinerstyle >
 <DivInput>

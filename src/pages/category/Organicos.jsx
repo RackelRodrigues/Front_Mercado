@@ -9,15 +9,36 @@ import { Link } from "react-router-dom";
 import{Boxinputheader, InputHeader} from "../../components/Inputstyle";
 import { Svg } from "../../components/Sidebar";
 import { TitleCategory, TitleConteiner } from "../../components/titles";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DivProdutos } from '../../components/BoxProdutos';
-
+import BoxProdutos from "../../components/BoxProdutos";
 
 const Organicos = ()=>{
     const [sidebar, setSidebar] = useState(false)
 
     const ShowSidebar = () => setSidebar (!sidebar)
+    const [organicos, setOrganicos] = useState([]);
+
+    useEffect(() => {
+      const fetchOrganicos = async () => {
+        try {
+          const response = await fetch('http://localhost:5000/api/buscar_organicos', {
+            method: 'GET',  // ou qualquer outro método que você precise
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',  // Isso é equivalente a withCredentials: true
+          });
     
+          const data = await response.json();
+          setOrganicos(data);
+        } catch (error) {
+          console.error('Erro ao buscar produtos:', error);
+        }
+      };
+      fetchOrganicos();
+    }, []);
+
 
     return(
 <>
@@ -60,9 +81,16 @@ const Organicos = ()=>{
 
 
 
-<divProdutos>
+<DivProdutos>
 
-</divProdutos>
+{organicos.slice(0, 3).map((organicos)=>(
+<BoxProdutos
+ ImgSrc="https://i.ibb.co/WcWXH6p/nivea-sabonete.jpg"
+ DescricaoProduto={organicos.nome}
+ PrecoProduto={organicos.descricao}
+ />
+ ))}
+</DivProdutos>
 
 
 

@@ -45,7 +45,10 @@ const Home = () => {
   const apiKey = '79174b714194e424260a290634fd0441';
 
 
-
+  const adicionarAoCarrinho = (item) => {
+    // Lógica para adicionar ao carrinho, por exemplo, usando o estado
+    console.log('Adicionado ao carrinho:', item);
+  };
 //mostar e fechar sidebar
   const [sidebar, setSidebar] = useState(false)
 
@@ -74,6 +77,29 @@ const Home = () => {
     fetchPromocao();
   }, []);
 
+
+  //para buscar os produtos:
+
+  const [produtos, setProdutos] = useState([]);
+  const [filtro, setFiltro] = useState('');
+
+  const handleChange = async (e) => {
+    const { value } = e.target;
+    setFiltro(value);
+
+    try {
+      const response = await axios.get('http://localhost:5000/api/buscar_produto', {
+        params: {
+          nome: value,
+        },
+      });
+
+      setProdutos(response.data);
+    } catch (error) {
+      console.error('Erro na requisição:', error.message);
+    }
+  };
+
   //const [files, setFiles] = useState([]);
 
  // useEffect(() => {
@@ -99,7 +125,11 @@ const Home = () => {
 
         <ConteinerHome>
         <Boxinputheader>
-         <InputHeader type='text'/>
+         <InputHeader
+         type="text"
+         value={filtro}
+         onChange={handleChange}
+         />
          <BiSearch size={25} color="#222"/>
         </Boxinputheader>
      <Svg>
@@ -120,20 +150,43 @@ const Home = () => {
       <Mysliper/>
        </Promobox>
   
-<BoxHome>
-{promocoes.slice(0, 6).map((promocao, index)=>(
-  
-  <Boxpromocao 
-  key={index}
-  Descricao={promocao.nome} 
-  Desconto={promocao.porcentagem}
-  Precopromo={promocao.promocao} 
-  Precoreal={promocao.descricao}
-  SrcReal="https://i.ibb.co/9GvnfyS/durar-feij-o.jpg"
-  />
-  ))}
+       <BoxHome>
+        {filtro && (
+          // Renderize os produtos da pesquisa abaixo do cabeçalho
+          <BoxHome>
+            {produtos.map((produto, index) => (
+              <div key={index}>
+                {/* Renderize os produtos da pesquisa... */}
+                {produto.nome}
+              </div>
+            ))}
+          </BoxHome>
+        )}
 
-  </BoxHome>
+        {!filtro && (
+          // Se não houver filtro, renderize os produtos do home
+          <>
+            {promocoes.slice(0, 6).map((promocao, index) => (
+  <Boxpromocao
+    key={index}
+    Descricao={promocao.nome}
+    Desconto={promocao.porcentagem}
+    Precopromo={promocao.Promocao}
+    Precoreal={promocao.descricao}
+    SrcReal="https://i.ibb.co/9GvnfyS/durar-feij-o.jpg"
+    onAdicionarAoCarrinho={() =>
+      adicionarAoCarrinho({
+        id: promocao.id,
+        foto: 'https://i.ibb.co/9GvnfyS/durar-feij-o.jpg',
+        titulo: promocao.nome,
+        preco: promocao.promocao,
+      })
+    }
+  />
+))}
+          </>
+        )}
+      </BoxHome>
         </DivHome>
     )
 }

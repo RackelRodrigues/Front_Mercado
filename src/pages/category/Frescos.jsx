@@ -22,7 +22,7 @@ const Frescos = ()=>{
     const [frescos, setFrescos] = useState([]);
 
   useEffect(() => {
-    const fetchfrescoa= async () => {
+    const fetchfrescos= async () => {
       try {
         const response = await fetch('http://localhost:5000/api/buscar_frescos', {
           method: 'GET',  // ou qualquer outro método que você precise
@@ -39,7 +39,7 @@ const Frescos = ()=>{
       }
     };
   
-    fetchbebidas();
+    fetchfrescos();
   }, []);
     
 

@@ -123,3 +123,22 @@ right: -15%;
 
 
 
+export const Checkbutton = styled.button`
+width: 250px;
+height: 35px;
+background-color: #1D4ED8;
+color : #fff;
+border-radius: 10px;
+display: flex;
+align-items: center;
+justify-content: center;
+position: relative;
+right: -25%;
+bottom: -80px;
+
+&:hover{
+    background-color: #205D9E;
+
+}
+
+`;

@@ -31,7 +31,6 @@ height: 152px;
 border-radius: 15px;
 background-color: #EDEEF0;
 margin: 20px;
-
 `;
 
 export const MetodoPag = Styled.div`

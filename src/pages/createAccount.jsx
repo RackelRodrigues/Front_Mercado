@@ -10,16 +10,17 @@ import { ImgUser } from '../components/logo';
 import { BiLockOpenAlt, BiLockAlt} from "react-icons/bi";
 import {AiOutlineMail} from "react-icons/ai";
 import axios from 'axios';
-import {Link} from "react-router-dom";
+import {Link, useNavigate}  from 'react-router-dom';
 import { GrHomeRounded } from "react-icons/gr";
 import { useState } from 'react';
+import { jwtDecode } from "jwt-decode";
 import  {  GoogleOAuthProvider, GoogleLogin   }from '@react-oauth/google' ;
 
 
 
 
 const CreateAccount = () =>{
-
+  const [formEnviado, setFormEnviado] = useState(false);
   const [user, setUser] = useState({nome:'', email:'',cpf:'', telefone:'',senha:''})
   
 
@@ -32,6 +33,7 @@ const CreateAccount = () =>{
       return updatedUser;
     });
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,15 +45,26 @@ const CreateAccount = () =>{
            },
            withCredentials: true, 
         });
-        
+
+
+        navigate('/Address', { state: { user: user } });
        
       // Imprimir as respostas (opcional)
       console.log('Response User:', responseUser.data);
+
+     
     } catch (error) {
       console.error('Erro na requisição:', error.message);
     }
   };
+//para a pag de address
+const navigate = useNavigate();
 
+const handleButtonClick = () => {
+  // Lógica do clique do botão, envio do formulário, etc.
+
+  navigate('/Address', { state: { user: user } });
+};
   
 
 return (
@@ -76,7 +89,14 @@ src='https://i.ibb.co/hXLbPJW/Design-sem-nome-2.jpg'
 <GoogleOAuthProvider clientId ="634127394492-gg2eah5se7ncabtnaovb4hpies130b8j.apps.googleusercontent.com">
     <GoogleLogin 
       onSuccess={credentialResponse => { 
-        console.log(credentialResponse);
+        const decoded = jwtDecode(credentialResponse.credential);
+        console.log(decoded);
+        setUser((prevUser) => ({
+          ...prevUser,
+          nome: decoded.name, // Adapte conforme necessário
+          email: decoded.email, // Adapte conforme necessário
+          // Outras informações do usuário...
+        }));
       }} 
       onError={() => { 
         console.log('Falha no login');
@@ -90,8 +110,6 @@ src='https://i.ibb.co/hXLbPJW/Design-sem-nome-2.jpg'
 </DivisaoContainer>
 
 <Form onSubmit={handleSubmit}>
-
-  
 <Divconteinerstyle>
 <DivInput>
 <Inputstyle type='text' placeholder='Nome Completo' name="nome"
@@ -122,7 +140,6 @@ src='https://i.ibb.co/hXLbPJW/Design-sem-nome-2.jpg'
 </DivInput>
 <DivInput>
 <Inputstyle type='text' placeholder='Digite sua melhor senha' 
-
 />
 <BiLockOpenAlt size={30} color='#000000'/>
 </DivInput>
@@ -138,7 +155,7 @@ value={user.senha} onChange={handleChange}
 
 
 <ContainerButton>
-<Link to="/Address"><Buttonsend type="submit">continue</Buttonsend></Link>
+<Buttonsend type="submit">continue</Buttonsend>
 </ContainerButton>
 
 </Form>

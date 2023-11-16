@@ -9,16 +9,36 @@ import { Link } from "react-router-dom";
 import{Boxinputheader, InputHeader} from "../../components/Inputstyle";
 import { Svg } from "../../components/Sidebar";
 import { TitleCategory, TitleConteiner } from "../../components/titles";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DivProdutos } from '../../components/BoxProdutos';
-
+import BoxProdutos from "../../components/BoxProdutos";
 
 
 const Saude = ()=>{
     const [sidebar, setSidebar] = useState(false)
 
     const ShowSidebar = () => setSidebar (!sidebar)
+    const [saude, setSaude] = useState([]);
+
+    useEffect(() => {
+      const fetchSaude = async () => {
+        try {
+          const response = await fetch('http://localhost:5000/api/buscar_saude', {
+            method: 'GET',  // ou qualquer outro método que você precise
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',  // Isso é equivalente a withCredentials: true
+          });
     
+          const data = await response.json();
+          setSaude(data);
+        } catch (error) {
+          console.error('Erro ao buscar produtos:', error);
+        }
+      };
+      fetchSaude();
+    }, []);
 
     return(
 <>
@@ -58,6 +78,13 @@ const Saude = ()=>{
 <DivProdutos>
 
 
+{saude.slice(0, 3).map((saude)=>(
+<BoxProdutos
+ ImgSrc="https://i.ibb.co/WcWXH6p/nivea-sabonete.jpg"
+ DescricaoProduto={saude.nome}
+ PrecoProduto={saude.descricao}
+ />
+ ))}
   
 </DivProdutos>
 

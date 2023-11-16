@@ -68,6 +68,7 @@ font-family: 'Lato', sem serifa;
  top: -73%;
  right: -76%;
  cursor: pointer;
+text-decoration: line-through; 
 `;
 
 //preco em preto

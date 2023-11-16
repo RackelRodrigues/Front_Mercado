@@ -148,7 +148,7 @@ export const DivisaoPontochave2 = styled.span`
 color:rgba(123, 123, 123, 0.44);
 font-weight: 400;
 position: absolute;
-top: 90%;
+top: 80%;
 left: -25%;
 
 
@@ -160,7 +160,7 @@ left: -25%;
     height: 2px;
     width: 400px;
     background-color: rgba(123, 123, 123, 0.44);
-    bottom: 35%;
+    bottom: 40%;
     left: 135px;
   }
 

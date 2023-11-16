@@ -105,7 +105,7 @@ const Boxpromocao = ({Desconto, Descricao, Precopromo, Precoreal, SrcReal}) =>{
     <Preco>{Precoreal}</Preco>
   
     </Conteinerprecos>
-    <ButtonAdicione  >Adicione ao carrinho</ButtonAdicione>
+    <ButtonAdicione onClick={() => onAdicionarAoCarrinho()} >Adicione ao carrinho</ButtonAdicione>
    </ConteinerProduto>
  
 </>
