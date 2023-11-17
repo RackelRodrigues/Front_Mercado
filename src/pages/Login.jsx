@@ -13,6 +13,8 @@ import {Checkbok, Containercheckbok} from '../components/checkbok'
 import {Link} from "react-router-dom";
 import { useState } from 'react';
 import axios from 'axios';
+import {useNavigate} from 'react-router-dom';
+import{Form} from '../components/links'
 
 
 
@@ -20,7 +22,7 @@ import axios from 'axios';
 
 const Login = () =>{
   const [loginData, setLoginData] = useState({
-    username: '',
+    email: '',
     password: '',
   });
 
@@ -29,36 +31,44 @@ const Login = () =>{
     setLoginData((prevData) => ({
       ...prevData,
       [name]: value,
+
+    
     }));
     console.log(loginData);
     console.log(`Campo ${name} alterado para:`, value);
   };
 
+//para a pag de address
+  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!loginData.email || !loginData.password) {
+      console.error('Email e senha são obrigatórios');
+      return;
+    }
+    try {  
+      const response = await axios.post('http://127.0.0.1:5000/api/login', {
+      email: loginData.email,
+      password: loginData.password,
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
   
-
-    try {
-      const response = await axios.post('http://localhost:5000/api/login', loginData,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          withCredentials: true,
-        }
-      );
-
-      // Lógica para lidar com a resposta do servidor
+   
+ 
       if (response.status === 200) {
         console.log('Login bem-sucedido:', response.data);
+        navigate('/Home');
       } else {
         console.error('Resposta do servidor não foi bem-sucedida:', response.status);
       }
     } catch (error) {
       console.error('Erro na requisição:', error.message);
     }
-  };
-
+ };
   return(
 <>
 
@@ -72,12 +82,15 @@ const Login = () =>{
 
     <TitleH3>Endereço e-mail</TitleH3>
 
+
+    <Form onSubmit={handleSubmit}>
     <DivInput>
+    
     <Inputstyle 
-    type='username' 
-    name='username'
+    type='email' 
+    name='email'
     placeholder='Digite seu Email'
-    value={loginData.username}
+    value={loginData.email}
     onChange={handleChange}
     />
     <BsPerson size={30} color="#000000"/>
@@ -95,7 +108,9 @@ const Login = () =>{
     onChange={handleChange}
     />
     <BiLockAlt size={30} color="#000000"/>
+
    </DivInput>
+  </Form >
 
    <Divconteiner>
     <Containercheckbok>

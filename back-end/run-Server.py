@@ -13,7 +13,7 @@ from peewee import IntegrityError
 app = Flask(__name__)
 
 CORS(app, resources={r"/add/*": {"origins": "*", "supports_credentials": True}})
-CORS(app, resources={r"/api/*": {"origins": "*", "supports_credentials": True}})
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173/", "supports_credentials": True}})
 CORS(app, supports_credentials=True)
 
 app.config['JSON_SORT_KEYS'] = False
@@ -163,75 +163,31 @@ def addCategory():
         return jsonify(error_message), 400
 
 #################################################
-CORS(app, resources={r"/api/login": {"origins": "http://localhost:5173/Login", "supports_credentials": True}})
-
 @app.route('/api/login', methods=['POST'])
 def login():
-   
     try:
         data = request.get_json()
-        username = data.get('email')  # Evitar KeyError usando get()
-        password = data.get('password')
+        email = data['email']
+        password = data['password']
 
-        if not username or not password:
-            raise ValueError("Credenciais incompletas")
+        # Replace this with your actual user retrieval logic
+        # Here, I'm using an example query to get a user by email
+        user = Usuarios.get_or_none(Usuarios.email == email)
 
-        query = Usuarios.select().where(Usuarios.email == username, Usuarios.senha == password)
+        if user and check_password_hash(user.senha, password):
+            response = {
+                "message": "Login successful",
+                "user_id": user.id,
+                "username": user.nome,
+            }
+            return jsonify(response), 200
+        else:
+            error_message = {"error": "Invalid credentials"}
+            return jsonify(error_message), 401
 
-        # Tratar caso o usuário não seja encontrado
-        user = query.first()
-        if user is None:
-            raise ValueError("Usuário não encontrado")
-
-        response = {
-            "message": "Login bem-sucedido",
-            "user_id": user.id,
-            "username": user.nome,
-        }
-
-        return jsonify(response), 200
-
-    except ValueError as ve:
-        error_message = {"error": str(ve)}
+    except Exception as e:
+        error_message = {"error": "Error during login"}
         return jsonify(error_message), 401
-
-    except Exception as e:
-        error_message = {"error": str(e)}
-        print(f"Erro interno no servidor: {str(e)}")
-        return jsonify(error_message), 500
-    
-
-@app.route('/api/buscar_produtos', methods=['GET'])
-def buscar_produtos():
-    try:
-        # Exemplo de busca de todos os produtos
-        produtos = Produtos.select()
-
-        # Converta os objetos do modelo para dicionários para resposta JSON
-        produtos_dict = [model_to_dict(produto) for produto in produtos]
-
-           
-           
-        return jsonify(produtos_dict), 200
-
-    except Exception as e:
-            error_message = {"error": str(e)}
-            return jsonify(error_message), 500
-    
-
-@app.route('/api/buscar_promocoes', methods=['GET'])
-def buscar_promocoes():
-    try:
-        # Exemplo de busca de todas as promoções
-        promocoes = Promocao.select()
-
-        # Converta os objetos do modelo para dicionários para resposta JSON
-        promocoes_dict = [model_to_dict(promocao) for promocao in promocoes]
-
-        return jsonify(promocoes_dict), 200
-
-    except Exception as e:
-        error_message = {"error": str(e)}
 
 
 @app.route('/api/buscar_bebidas', methods=['GET'])
@@ -380,8 +336,8 @@ def buscar_padaria():
 @app.route('/api/buscar_saude', methods=['GET'])
 def buscar_saude():
     try:
-        saude = saude.select()
-        saude_dict = [model_to_dict(saude_item) for saude_item in saude]
+        saude = Saude.select()
+        saude_dict = [model_to_dict(saude_item) for saude_item in Saude]
         return jsonify(saude_dict), 200
 
     except Exception as e:
