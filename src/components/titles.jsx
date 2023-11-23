@@ -65,7 +65,7 @@ font-family: 'Lato', sem serifa;
  font-size: 15px;
  color: #92909A;
  position: relative;
- top: -73%;
+ top: -90%;
  right: -76%;
  cursor: pointer;
 text-decoration: line-through; 
@@ -78,7 +78,7 @@ font-family: 'Lato', sem serifa;
  font-size: 15px;
  color: #000000;
  position: relative;
- top: -88%;
+ top: -104%;
  right: -90%;
  cursor: pointer;
 

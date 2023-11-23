@@ -11,7 +11,8 @@ import Itens from "../components/itens";
 import CheckbokCarrinho from '../components/checkbok';
 import { useState } from "react";
 import { Checkbutton } from "../components/buttonstyle";
-import Itens2 from '../components/Itens2'
+import Itens2 from '../components/Itens2';
+import { useNavigation } from "react-router-dom";
 
 
 const BoxAlinhamento = Styled.div`
@@ -20,7 +21,7 @@ margin-top: 150px;
 left: -30%;
 width: 864px;
 
-padding-bottom: 100px;
+padding-bottom: 250px;
 `;
 
 const DivTitle = Styled.div`
@@ -56,16 +57,23 @@ const MeuCarrinho = ()=>{
     
     const [carrinho, setCarrinho] = useState([])
     //para selecionar a opção de pagamento
-    const [selectedOption, setSelectedOption] = useState();
-    const handleCheckboxChange = (option) => {
-        console.log("Option selected:", option); 
-      setSelectedOption(option);
-    };
+    const YourComponent = () => {
+        const navigation = useNavigation();
+        const [selectedOption, setSelectedOption] = useState(null);
+      
+        const handleCheckboxChange = (option) => {
+          console.log("Option selected:", option);
+          setSelectedOption(option);
+      
+          // Navegar para a página Home quando uma opção é selecionada
+          navigation.navigate('Home');
+        };
+      
+        // Restante do seu componente...
+      };
 
     //calcular a quantidade de itens do carrinho
-    const calcularTotalItens = () => {
-        return itensCarrinho.reduce((total, item) => total + item.quantidade, 0);
-      };
+    
     return(
     <>
   
@@ -84,14 +92,7 @@ const MeuCarrinho = ()=>{
 <Titlesquantidade3>Valor</Titlesquantidade3>
 
 <BoxAlinhamento>
-   
-<Boxcarrinho
-SrcFoto="https://i.ibb.co/7KXVdzy/chocolate.jpg"
-TituloProduto="Chocolate Lacta diamante negro"
-Preco="R$11,50"
-TotalProduto="R$5,00"
-/>
-
+ 
 <Boxcarrinho
 SrcFoto="https://i.ibb.co/d4NL4G1/combo.jpg"
 TituloProduto="combo caixas de chocolate"
@@ -116,18 +117,19 @@ TotalProduto="R$50,00"
 
 <Itens
 TituloPreço="Itens"
-QuantidadePecas={calcularTotalItens()}
+QuantidadePecas="3"
 />
 
 <TitlesMetodo>Metodo de Pagamento</TitlesMetodo>
 
 <MetodosCarrinho>
 <CheckbokCarrinho
- NomeCarrinho='Boleto bancario'
- Imgpagamento="https://i.ibb.co/VvhyGXM/boleto.jpg"
- checked={selectedOption === 'Boleto bancario'}
- onChange={() => handleCheckboxChange('Boleto bancario')}
+ NomeCarrinho='Pagar em Dinheiro'
+ Imgpagamento="https://i.ibb.co/Hd8PfbM/image.png"
+ checked={selectedOption === 'Pagar em Dinheiro'}
+ onChange={() => handleCheckboxChange('Pagar em Dinheiro')}
 />
+
 <CheckbokCarrinho
  NomeCarrinho="Pix"
  Imgpagamento="https://i.ibb.co/xqyMnFV/pix.png"

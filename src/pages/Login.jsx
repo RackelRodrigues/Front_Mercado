@@ -15,6 +15,8 @@ import { useState } from 'react';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 import{Form} from '../components/links'
+import {AiOutlineArrowLeft} from 'react-icons/ai';
+import { MoverArrow } from '../components/linkstyle';
 
 
 
@@ -23,7 +25,7 @@ import{Form} from '../components/links'
 const Login = () =>{
   const [loginData, setLoginData] = useState({
     email: '',
-    password: '',
+    senha: '',
   });
 
   const handleChange = (e) => {
@@ -43,22 +45,27 @@ const Login = () =>{
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!loginData.email || !loginData.password) {
-      console.error('Email e senha são obrigatórios');
-      return;
-    }
-    try {  
-      const response = await axios.post('http://127.0.0.1:5000/api/login', {
-      email: loginData.email,
-      password: loginData.password,
-    }, {
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    });
   
-   
- 
+    if (!loginData.email || !loginData.senha) { 
+      return (
+        <TitleH3>Email e senha são obrigatórios</TitleH3>
+      
+
+    );
+    }
+  
+    console.log('Dados a serem enviados:', loginData);
+  
+    try {
+      const response = await axios.post('http://127.0.0.1:5000/api/login', loginData, {headers:{
+        'Content-Type': 'application/json'
+      },
+      withCredentials: true, 
+   });
+      
+  
+      console.log('Resposta da API:', response);
+  
       if (response.status === 200) {
         console.log('Login bem-sucedido:', response.data);
         navigate('/Home');
@@ -68,18 +75,22 @@ const Login = () =>{
     } catch (error) {
       console.error('Erro na requisição:', error.message);
     }
- };
+  };
   return(
 <>
-
+<MoverArrow>
+<Link to ="/Home">
+<AiOutlineArrowLeft size={40} color="#1D4ED8"/>
+</Link>
+</MoverArrow>
 <ContainerLogin>
 <Logo>
-<Link to="/Home">
+
 <LogoImage src={Caipira} alt='logo do mercadinho'/>
-</Link>
+
 </Logo>
 
-
+    
     <TitleH3>Endereço e-mail</TitleH3>
 
 
@@ -103,8 +114,8 @@ const Login = () =>{
     <Inputstyle 
     type='password' 
     placeholder='Digite sua senha'
-    name='password'
-    value={loginData.password}
+    name='senha'
+    value={loginData.senha}
     onChange={handleChange}
     />
     <BiLockAlt size={30} color="#000000"/>

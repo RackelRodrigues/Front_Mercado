@@ -15,7 +15,38 @@ export const Inputstyle = styled.input`
    }
   
 `;
+export const BoxInputcarrinho = styled.div`
+width: 30px;
+height: 20px;
+color: #000;
+background-color:#fff;
+border-radius: 8px;
+position: relative;
+top: 30%;
+right: 10%;
+font-size: medium;
 
+
+
+`;
+
+
+export const Inputcarrinho = styled.input`
+width: 30px;
+height: 20px;
+color: #000;
+background-color:#fff;
+border-radius: 3px;
+position: relative;
+top: -78%;
+right: -58%;
+font-size: medium;
+
+
+&:focus {
+outline: 2px solid #fff; 
+}
+`;
 
 export const Boxinputheader = styled.div`
 width: 350px;

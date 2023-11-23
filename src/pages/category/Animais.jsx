@@ -1,5 +1,4 @@
 import { ImagemTitulo } from '../../components/logo';
-import { useState, useEffect } from 'react';
 import { GiHamburgerMenu } from "react-icons/gi";
 import {BiSearch} from "react-icons/bi"
 import Sidebar from "../../components/Sidebar";
@@ -12,11 +11,13 @@ import { Svg } from "../../components/Sidebar";
 import { TitleCategory, TitleConteiner } from '../../components/titles';
 import BoxProdutos from '../../components/BoxProdutos'
 import { DivProdutos } from '../../components/BoxProdutos';
-
+import { useState, useEffect} from "react";
 
 
 const Animais = () =>{
     
+
+  const [Animal, setAnimal] = useState([])
   const [sidebar, setSidebar] = useState(false)
 
   const ShowSidebar = () => setSidebar (!sidebar)
@@ -40,8 +41,37 @@ const Animais = () =>{
         console.error('Erro ao buscar produtos:', error);
       }
     };
+  
     fetchanimais();
   }, []);
+
+
+
+  const fetchCategoriaFotos = async (categoria) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/fotos/${categoria}`, Animal, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      });
+
+      const data = await response.json();
+      console.log('Fotos da categoria:', data);
+      setAnimal(data);
+      console.log("data",Animal);
+    } catch (error) {
+      console.error('Erro ao buscar fotos da categoria:', error);
+    }
+  };
+
+  // Exemplo de como chamar a função para buscar fotos de uma categoria específica
+  useEffect(() => {
+    const categoria = 'Animais';
+    fetchCategoriaFotos(categoria);
+  }, []);
+  console.log(Animal)
 
     return(
 <>
@@ -78,30 +108,15 @@ const Animais = () =>{
  </TitleConteiner>
 
 <DivProdutos>
- <BoxProdutos
- ImgSrc="https://i.ibb.co/ZLKf0pY/kit-animais.jpg"
- DescricaoProduto="kit higiene para cachorros"
-PrecoProduto="R$82,39"
- />
-
-
+{animais.slice(0, 3).map((animais, index)=>(
 <BoxProdutos
- ImgSrc="https://i.ibb.co/ZLKf0pY/kit-animais.jpg"
- DescricaoProduto="kit higiene para cachorros"
-PrecoProduto="R$82,39"
+ key={index}
+ ImgSrc={Animal[index] || ""}
+ DescricaoProduto={animais.nome}
+ PrecoProduto={animais.descricao}
  />
+  ))}
 
-<BoxProdutos
- ImgSrc="https://i.ibb.co/ZLKf0pY/kit-animais.jpg"
- DescricaoProduto="kit higiene para cachorros"
-PrecoProduto="R$82,39"
- />
-
-<BoxProdutos
- ImgSrc="https://i.ibb.co/ZLKf0pY/kit-animais.jpg"
- DescricaoProduto="kit higiene para cachorros"
-PrecoProduto="R$82,39"
- />
 </DivProdutos>
 
 </>

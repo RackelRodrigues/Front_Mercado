@@ -91,7 +91,18 @@ margin-bottom: 10px;
 
 const Boxpromocao = ({Desconto, Descricao, Precopromo, Precoreal, SrcReal}) =>{
     // Adicione a lógica para adicionar ao carrinho
- 
+    const [carrinho, setCarrinho] = useState([]);
+
+
+
+    const adicionarAoCarrinho = (item) => {
+      // Lógica para adicionar ao carrinho
+      Desconto
+      console.log('Adicionado ao carrinho:', item.Desconto);
+    
+      // Atualiza o estado do carrinho
+      setCarrinho([...carrinho, item.Desconto]);
+    };
 
   return(
   <>
@@ -101,11 +112,13 @@ const Boxpromocao = ({Desconto, Descricao, Precopromo, Precoreal, SrcReal}) =>{
     <DescricaoProduto>{Descricao}</DescricaoProduto>
     <Precopromoçao>{Precopromo}</Precopromoçao>
     <Conteinerprecos>
+      
     <DescontoProduto>{Desconto}</DescontoProduto>
     <Preco>{Precoreal}</Preco>
   
     </Conteinerprecos>
-    <ButtonAdicione onClick={() => onAdicionarAoCarrinho()} >Adicione ao carrinho</ButtonAdicione>
+    <ButtonAdicione onClick={() => adicionarAoCarrinho({
+    })} >Adicione ao carrinho</ButtonAdicione>
    </ConteinerProduto>
  
 </>

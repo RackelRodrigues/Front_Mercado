@@ -18,6 +18,7 @@ const Saude = ()=>{
     const [sidebar, setSidebar] = useState(false)
 
     const ShowSidebar = () => setSidebar (!sidebar)
+    const [saudes, setSaudes] = useState([]);
     const [saude, setSaude] = useState([]);
 
     useEffect(() => {
@@ -39,6 +40,31 @@ const Saude = ()=>{
       };
       fetchSaude();
     }, []);
+
+    const fetchCategoriaFotos = async (categoria) => {
+      try {
+        const response = await fetch(`http://localhost:5000/api/fotos/${categoria}`, saudes, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        });
+  
+        const data = await response.json();
+        setSaudes(data);
+        console.log('Fotos da categoria:', data);
+        console.log("data",saudes);
+      } catch (error) {
+        console.error('Erro ao buscar fotos da categoria:', error);
+      }
+    };
+  
+    useEffect(() => {
+      const categoria = 'Saude';
+      fetchCategoriaFotos(categoria);
+    }, []);
+    console.log(saudes)
 
     return(
 <>
@@ -78,9 +104,10 @@ const Saude = ()=>{
 <DivProdutos>
 
 
-{saude.slice(0, 3).map((saude)=>(
+{saude.slice(0, 3).map((saude, index)=>(
 <BoxProdutos
- ImgSrc="https://i.ibb.co/WcWXH6p/nivea-sabonete.jpg"
+ key={index}
+ ImgSrc={saudes[index] || ""}
  DescricaoProduto={saude.nome}
  PrecoProduto={saude.descricao}
  />

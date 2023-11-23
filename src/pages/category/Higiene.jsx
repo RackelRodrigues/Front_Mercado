@@ -19,30 +19,61 @@ import BoxProdutos from '../../components/BoxProdutos'
 const Higiene = ()=>{
     const [sidebar, setSidebar] = useState(false)
 
+   const [higienes, setHigienes] = useState([])
+
     const ShowSidebar = () => setSidebar (!sidebar)
 
     const [higiene, setHigiene] = useState([]);
 
-  useEffect(() => {
-    const fetchhigiene= async () => {
-      try {
-        const response = await fetch('http://localhost:5000/api/buscar_higine', {
-          method: 'GET',  // ou qualquer outro método que você precise
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include',  // Isso é equivalente a withCredentials: true
-        });
-  
-        const data = await response.json();
-        setHigiene(data);
-      } catch (error) {
-        console.error('Erro ao buscar produtos:', error);
-      }
-    };
-    fetchhigiene();
-  }, []);
+    useEffect(() => {
+      const fetchhigiene= async () => {
+        try {
+          const response = await fetch('http://localhost:5000/api/buscar_higiene', {
+            method: 'GET',  // ou qualquer outro método que você precise
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',  // Isso é equivalente a withCredentials: true
+          });
     
+          const data = await response.json();
+          setHigiene(data);
+        } catch (error) {
+          console.error('Erro ao buscar produtos:', error);
+        }
+      };
+    
+      fetchhigiene();
+    }, []);
+    
+
+
+  const fetchCategoriaFotos = async (categoria) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/fotos/${categoria}`, higienes, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      });
+
+      const data = await response.json();
+      setHigienes(data);
+      console.log('Fotos da categoria:', data);
+    
+      console.log("data", higienes);
+    } catch (error) {
+      console.error('Erro ao buscar fotos da categoria:', error);
+    }
+  };
+
+  useEffect(() => {
+    const categoria = 'Higiene';
+    fetchCategoriaFotos(categoria);
+  }, []);
+  console.log(higienes)
+
 
     return(
 <>
@@ -86,9 +117,10 @@ const Higiene = ()=>{
 <DivProdutos>
 
 
-{higiene.slice(0, 3).map((higiene)=>(
+{higiene.slice(0, 3).map((higiene, index)=>(
 <BoxProdutos
- ImgSrc="https://i.ibb.co/WcWXH6p/nivea-sabonete.jpg"
+ key={index}
+ ImgSrc={higienes[index] || ""}
  DescricaoProduto={higiene.nome}
  PrecoProduto={higiene.descricao}
  />

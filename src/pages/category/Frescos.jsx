@@ -19,6 +19,8 @@ const Frescos = ()=>{
 
     const ShowSidebar = () => setSidebar (!sidebar)
 
+   const [fresco, setFresco] = useState([]);
+
     const [frescos, setFrescos] = useState([]);
 
   useEffect(() => {
@@ -42,6 +44,32 @@ const Frescos = ()=>{
     fetchfrescos();
   }, []);
     
+
+//buscar fotos dinacamente
+  const fetchCategoriaFotos = async (categoria) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/fotos/${categoria}`, fresco, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      });
+
+      const data = await response.json();
+      console.log('Fotos da categoria:', data);
+      setFresco(data);
+      console.log("data",fresco);
+    } catch (error) {
+      console.error('Erro ao buscar fotos da categoria:', error);
+    }
+  };
+
+  useEffect(() => {
+    const categoria = 'Frescos';
+    fetchCategoriaFotos(categoria);
+  }, []);
+  console.log(fresco)
 
     return(
 <>
@@ -80,9 +108,10 @@ const Frescos = ()=>{
   </TitleConteiner>
 
 <DivProdutos>
-  {frescos.slice(0, 3).map((frescos)=>(
+  {frescos.slice(0, 3).map((frescos, index)=>(
 <BoxProdutos
- ImgSrc="https://i.ibb.co/nDHt53T/pizza-portuguesa-seara.jpg"
+ key={index}
+ ImgSrc={fresco[index] || ""}
  DescricaoProduto={frescos.nome}
  PrecoProduto={frescos.descricao}
 

@@ -7,13 +7,15 @@ from flask_cors import CORS
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from peewee import IntegrityError
+from produto import Promocao 
+
 
 
 
 app = Flask(__name__)
 
 CORS(app, resources={r"/add/*": {"origins": "*", "supports_credentials": True}})
-CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173/", "supports_credentials": True}})
+CORS(app, resources={r"/api/*": {"origins": "*", "supports_credentials": True}})
 CORS(app, supports_credentials=True)
 
 app.config['JSON_SORT_KEYS'] = False
@@ -109,6 +111,30 @@ def addAddress():
         app.logger.error("Erro ao processar solicitação: %s", str(e))
         error_message = {"error": str(e)}
         return jsonify(error_message), 500
+    
+
+############################################
+
+@app.route('/api/buscar_promocoes', methods=['GET'])
+def buscar_promocoes():
+    try:
+     
+        # Exemplo de busca de todas as promoções
+        promocoes = Promocao.select()
+
+        # Converta os objetos do modelo para dicionários para resposta JSON
+        promocoes_dict = [model_to_dict(promocao) for promocao in promocoes]
+
+        return jsonify(promocoes_dict), 200
+
+   
+
+    except Exception as e:
+        # Outras exceções
+        error_message = {"error": str(e)}
+        return jsonify(error_message), 500
+
+    ###############################################################3
 
 @app.route('/add/products', methods=['POST'])
 def addProducts():
@@ -122,7 +148,7 @@ def addProducts():
         produto = Produtos(
             nome_produto = nome_produto,
             valor = valor,
-            categoria = Categoria.select().where(Categoria.nome == categoria_id).get(),
+            categoria = Categorias.select().where(Categorias.nome == categoria_id).get(),
             quantidade = quantidade
         )   
         produto.save()
@@ -146,7 +172,7 @@ def addCategory():
         data = request.get_json()
         descricao= data['descricao']
 
-        categoria = Categoria(
+        categoria = Categorias(
             decricao = descricao
         )   
         categoria.save()
@@ -165,44 +191,22 @@ def addCategory():
 #################################################
 @app.route('/api/login', methods=['POST'])
 def login():
+    data = request.get_json()
+
+    if 'email' not in data or 'senha' not in data:
+        return jsonify({'error': 'Informe email e senha'}), 400
+
+    email = data['email']
+    senha = data['senha']
+
     try:
-        data = request.get_json()
-        email = data['email']
-        password = data['password']
+        usuario = Usuarios.get(Usuarios.email == email, Usuarios.senha == senha)
+        response = jsonify({'mensagem': 'Login bem-sucedido', 'usuario_id': usuario.id})
+        response.headers.add('Access-Control-Allow-Origin', 'http://localhost:5173')  # Substitua pela origem do seu aplicativo React
+        return response
+    except Usuarios.DoesNotExist:
+        return jsonify({'error': 'Credenciais inválidas'}), 401
 
-        # Replace this with your actual user retrieval logic
-        # Here, I'm using an example query to get a user by email
-        user = Usuarios.get_or_none(Usuarios.email == email)
-
-        if user and check_password_hash(user.senha, password):
-            response = {
-                "message": "Login successful",
-                "user_id": user.id,
-                "username": user.nome,
-            }
-            return jsonify(response), 200
-        else:
-            error_message = {"error": "Invalid credentials"}
-            return jsonify(error_message), 401
-
-    except Exception as e:
-        error_message = {"error": "Error during login"}
-        return jsonify(error_message), 401
-
-
-@app.route('/api/buscar_bebidas', methods=['GET'])
-def buscar_bebidas():
-    try:
-        # Exemplo de busca de todas as promoções
-        bebidas = Bebida.select()
-
-        # Converta os objetos do modelo para dicionários para resposta JSON
-        Bebidas_dict = [model_to_dict(Bebida) for Bebida in bebidas]
-
-        return jsonify(Bebidas_dict), 200
-
-    except Exception as e:
-        error_message = {"error": str(e)}
 
 
 app.secret_key = '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'  # Substitua com uma chave secreta segura
@@ -223,18 +227,19 @@ client_config = {
 }
 
 @app.route('/api/buscar_higiene', methods=['GET'])
-def buscar_higiene():
+def buscar_Higine():
     try:
         # Exemplo de busca de todas as promoções
-        higienes = Higiene.select()
+        Higienes = Higiene.select()
 
         # Converta os objetos do modelo para dicionários para resposta JSON
-        Higiene_dict = [model_to_dict(Higiene) for Higiene in higienes]
+        Higiene_dict = [model_to_dict(Higiene) for Higiene in Higienes]
 
         return jsonify(Higiene_dict), 200
 
     except Exception as e:
         error_message = {"error": str(e)}
+
 
 
 @app.route('/api/buscar_frescos', methods=['GET'])
@@ -253,15 +258,30 @@ def buscar_Frescos():
 
 
 @app.route('/api/buscar_congelados', methods=['GET'])
-def buscar_Congelados():
+def buscar_Congelado():
     try:
         # Exemplo de busca de todas as promoções
-        congelados= Congelado.select()
+        congelado = Congelado.select()
 
         # Converta os objetos do modelo para dicionários para resposta JSON
-        Congelados_dict = [model_to_dict(Congelado) for Congelado in congelados]
+        Congelado_dict = [model_to_dict(Congelado) for Congelado in congelado]
 
-        return jsonify(Congelados_dict), 200
+        return jsonify(Congelado_dict), 200
+
+    except Exception as e:
+        error_message = {"error": str(e)}
+
+
+@app.route('/api/buscar_bebidas', methods=['GET'])
+def buscar_bebidas():
+    try:
+        # Exemplo de busca de todas as promoções
+        bebidas = Bebida.select()
+
+        # Converta os objetos do modelo para dicionários para resposta JSON
+        Bebidas_dict = [model_to_dict(Bebida) for Bebida in bebidas]
+
+        return jsonify(Bebidas_dict), 200
 
     except Exception as e:
         error_message = {"error": str(e)}
@@ -270,10 +290,10 @@ def buscar_Congelados():
 def buscar_animais():
     try:
         # Exemplo de busca de todas as promoções
-        Animais= Animais.select()
+        animais= Animais.select()
 
         # Converta os objetos do modelo para dicionários para resposta JSON
-        animais_dict = [model_to_dict(Animais) for Animais in Animais]
+        animais_dict = [model_to_dict(Animais) for Animais in animais]
 
         return jsonify(animais_dict), 200
 
@@ -345,69 +365,74 @@ def buscar_saude():
         return jsonify(error_message), 500
 
 
-flow = InstalledAppFlow.from_client_config(
-    client_config,
-    scopes=['https://www.googleapis.com/auth/drive.readonly'],
-)
 
-@app.route('/google-api')
-def google_api():
-    authorization_url, state = flow.authorization_url(prompt='consent')
-    session['state'] = state
-    return redirect(authorization_url)
-
-@app.route('/callback')
-def callback():
-    flow.fetch_token(authorization_response=request.url)
-    credentials = flow.credentials
-    # Use credentials para acessar a API do Google Drive
-    drive_service = build('drive', 'v3', credentials=credentials)
-
-    # Identificador da pasta desejada
-    folder_id = '1puuqBDgLMEfzrGpLEDpLlYvl9lGrPuq7'
-
-    # Exemplo: listando arquivos dentro da pasta desejada
-    results = drive_service.files().list(q=f"'{folder_id}' in parents",
-                                          spaces='drive',
-                                          fields='files(id, name)').execute()
-    files = results.get('files', [])
-
-    if not files:
-        print('Nenhum arquivo encontrado na pasta do Google Drive')
-        return 'Nenhum arquivo encontrado na pasta do Google Drive'
-    else:
-        # Você pode retornar as informações dos arquivos ou os URLs de download, por exemplo
-        return jsonify({'files': files})
     
+#fazer uma busca com filtro no home
 
 @app.route('/api/buscar_produto', methods=['GET'])
 def buscar_produto():
     try:
         nome = request.args.get('nome')
-        categoria = request.args.get('categoria')
-        preco = request.args.get('preco')
 
         # Construir a query inicial
-        query = Produtos.select().join(Categoria)
+        query = Promocao.select()
 
-        # Aplicar filtros conforme necessário
+        # Aplicar filtro pelo nome
         if nome:
-            query = query.where(Produtos.nome_produto.contains(nome))
-        if categoria:
-            query = query.where(Categoria.descricao == categoria)
-        if preco:
-            query = query.where(Produtos.valor == preco)
+            query = query.where(Promocao.nome.contains(nome))
+            
+        
+        # Executar a query e converter para lista de dicionários
+        promocoes = [model_to_dict(promocao) for promocao in query.execute()]
 
-        # Executar a query
-        produtos = query.dicts()
-
-        return jsonify(produtos), 200
+        return jsonify(promocoes), 200
 
     except Exception as e:
-        print(f"Erro na busca de produtos: {e}")
+        print(f"Erro na busca de promoções: {e}")
         error_message = {"error": str(e)}
         return jsonify(error_message), 500
 
+#vrificar se o usuario tem o endereço:
+
+@app.route('/api/verificar-endereco/<int:user_id>', methods=['GET'])
+def verificar_endereco_completo(user_id):
+    usuario = Usuarios.query.get(user_id)
+
+    if usuario:
+        if usuario.endereco:
+            return jsonify({'enderecoCompleto': True, 'endereco': Usuarios.endereco})
+        else:
+            return jsonify({'enderecoCompleto': False, 'mensagem': 'Endereço incompleto'})
+    else:
+        return jsonify({'erro': 'Usuário não encontrado'}), 404
+    
+
+##########################################################
+#rota para verifcar os src das imagens 
+
+@app.route('/api/fotos/<categoria>', methods=['GET'])
+def obter_links_categoria_rota(categoria):
+    categorias = {
+        'Promocoes': ["https://i.ibb.co/wBqCNmb/produto1arroz.jpg", "https://i.ibb.co/d4NL4G1/combo.jpg", "https://i.ibb.co/f2Vx6by/pacote-de-feij-o.jpg", "https://i.ibb.co/hmcjrCx/chocolatr.jpg", "https://i.ibb.co/d4NL4G1/combo.jpg", "https://i.ibb.co/7KXVdzy/chocolate.jpg"],
+        'Animais': ["https://ibb.co/bbBkXw9", "https://ibb.co/jfhMvPy", "https://i.ibb.co/NLtRPrW/vinho-cabernet-sauvignon-casillero-del-diablo-750ml-28fa1dc6-cde1-41e9-a116-99a239427963.jpg"],
+        'Higiene': ["https://i.ibb.co/TmBzgv6/crest-shampoo.jpg", "https://i.ibb.co/WcWXH6p/nivea-sabonete.jpg", "https://i.ibb.co/y0zH9Ws/image.png"],
+        'Frescos': ["https://i.ibb.co/pnMngWQ/image.png", "https://i.ibb.co/gtMWYqC/alface.jpg", "https://i.ibb.co/ccmzhRK/image.png"],
+        'Bebida' : ["https://i.ibb.co/NLtRPrW/vinho-cabernet-sauvignon-casillero-del-diablo-750ml-28fa1dc6-cde1-41e9-a116-99a239427963.jpg", "https://i.ibb.co/dMB20wP/garrafa.jpg", "https://i.ibb.co/LJB0wGZ/image.png"],
+       'Mercearia':["https://i.ibb.co/cc5QYRc/uncle-bens-arroz.jpg", "https://i.ibb.co/PwTGThW/barilaa-marracarr-o.jpg", "https://i.ibb.co/9GvnfyS/durar-feij-o.jpg"],
+       'Limpeza': ["https://i.ibb.co/71rrP4N/image.png", "https://i.ibb.co/WGfVkY8/papel-toalha.jpg", "https://i.ibb.co/9ZwgXnr/detergente-ype.jpg"],
+       'Congelado' : ["https://i.ibb.co/nDHt53T/pizza-portuguesa-seara.jpg", "https://i.ibb.co/Kj8RBKz/file-de-frango.jpg", "https://i.ibb.co/8c9hyc9/ervilhas-daucy-ervilhas-finas.jpg"],
+        'Saude' : ["https://i.ibb.co/c3vbN6V/band-aid.jpg", "https://i.ibb.co/dm3rgv1/centrum.jpg", "https://i.ibb.co/N3fdZct/Nature-Made.jpg"],
+        'Animais':["https://i.ibb.co/b3dTFg3/image.png", "https://i.ibb.co/sgZbZXR/image.png", "https://i.ibb.co/HLvRmMq/image.png"],
+        'Padaria': ["https://i.ibb.co/ZXZFBcf/image.png","https://i.ibb.co/XLwStzZ/image.png", "https://i.ibb.co/mbR4Jgk/image.png"],
+        'Organicos': ["https://i.ibb.co/s2C3VX9/image.png", "https://i.ibb.co/YXV7n1J/image.png", "https://i.ibb.co/VtPRL8v/image.png"],
+        # Adicione mais categorias conforme necessário
+    }
+
+    if categoria in categorias:
+        links_categoria = categorias[categoria]
+        return jsonify(links_categoria)
+    else:
+        return jsonify({"error": "Categoria não encontrada"}), 404
   
 @app.route('/')
 def index():

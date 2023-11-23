@@ -21,6 +21,9 @@ const Mercearia = ()=>{
 
     const ShowSidebar = () => setSidebar (!sidebar)
     
+
+   const [mercearias, setMercearias] = useState([])
+
     const [mercearia, setMercearia] = useState([]);
 
     useEffect(() => {
@@ -42,6 +45,34 @@ const Mercearia = ()=>{
       };
       fetchmercearia();
     }, []);
+
+
+
+
+    const fetchCategoriaFotos = async (categoria) => {
+      try {
+        const response = await fetch(`http://localhost:5000/api/fotos/${categoria}`, mercearias, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        });
+  
+        const data = await response.json();
+        console.log('Fotos da categoria:', data);
+        setMercearias(data);
+        console.log("data",mercearias);
+      } catch (error) {
+        console.error('Erro ao buscar fotos da categoria:', error);
+      }
+    };
+  
+    useEffect(() => {
+      const categoria = 'Mercearia';
+      fetchCategoriaFotos(categoria);
+    }, []);
+    console.log(mercearias)
 
     return(
 <>
@@ -85,9 +116,10 @@ const Mercearia = ()=>{
 
 <DivProdutos>
 
-{mercearia.slice(0, 3).map((mercearia)=>(
+{mercearia.slice(0, 3).map((mercearia, index)=>(
 <BoxProdutos
- ImgSrc="https://i.ibb.co/WcWXH6p/nivea-sabonete.jpg"
+key={index}
+ ImgSrc={mercearias[index] || ""}
  DescricaoProduto={mercearia.nome}
  PrecoProduto={mercearia.descricao}
  />

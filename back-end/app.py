@@ -1,7 +1,8 @@
-from flask import Flask, render_template
+from flask import Flask
 from Config import Config
 from peewee import SqliteDatabase
 from flask_cors import CORS
+from peewee import Model
 
 
 

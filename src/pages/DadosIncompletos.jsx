@@ -7,7 +7,7 @@ import { ContinueAtencao } from "../components/buttonstyle";
 import { GrHomeRounded } from "react-icons/gr";
 import { BiLockAlt} from "react-icons/bi";
 import {AiOutlineArrowRight} from 'react-icons/ai';
-
+import { useState } from "react";
 
 
 
@@ -46,13 +46,29 @@ const ButtonDiv = Styled.div`
 
 
 const DadosIncompletos = () =>{
+
+  const [modalAberto, setModalAberto] = useState(false);
+
+const handleAbrirModal = () => {
+  setModalAberto(true);
+};
+
+const handleFecharModal = () => {
+  setModalAberto(false);
+};
+
+const handlePreencherEndereco = (endereco) => {
+  // Faça algo com o endereço preenchido, por exemplo, enviar para o backend
+  console.log('Endereço preenchido:', endereco);
+}
+
     return(
         <>
 
         <ConteinerDados>
            
         <Divimg>
-        <Imgdados src="https://i.ibb.co/z6BN98H/alert-rubber-stamp-vector-12324062-fotor-bg-remover-20231104182329.png"/>
+        <Imgdados alt="foto atenção" src="https://i.ibb.co/z6BN98H/alert-rubber-stamp-vector-12324062-fotor-bg-remover-20231104182329.png"/>
         </Divimg>
         
         <TitleH1>Dados Incompletos</TitleH1>
@@ -93,7 +109,7 @@ const DadosIncompletos = () =>{
        </ConteinerInputsDados>
        <ButtonDiv>
        <ContinueAtencao>Continue
-      <AiOutlineArrowRight size={20} color='#fff'/>
+       <AiOutlineArrowRight size={20} color='#fff'/>
        </ContinueAtencao>
        </ButtonDiv>
        </ConteinerDados>
@@ -101,7 +117,7 @@ const DadosIncompletos = () =>{
        
         </>
     )
-}
+    }
 
 
 export default DadosIncompletos;

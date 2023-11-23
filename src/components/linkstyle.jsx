@@ -165,3 +165,14 @@ left: -25%;
   }
 
 `;
+
+
+
+export const MoverArrow= styled.div`
+
+position: absolute;
+left: 15%;
+
+
+
+`;

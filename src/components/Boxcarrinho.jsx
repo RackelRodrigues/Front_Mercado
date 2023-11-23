@@ -3,6 +3,7 @@ import { Removebutton } from "./buttonstyle";
 import { ProdutoCarrinhoimg } from "./logo";
 import { Titleprecocarrinho, TitleTotalcarrinho, Produto1} from "./titles";
 import { useState } from "react";
+import { BoxInputcarrinho, Inputcarrinho } from "../components/Inputstyle";
 
 
 export const MetodosCarrinho = Styled.div`
@@ -33,6 +34,13 @@ background-color: #EDEEF0;
 margin: 20px;
 `;
 
+const Conteinerpreco = Styled.div`
+position: relative;
+top: -100%;
+
+`;
+
+
 export const MetodoPag = Styled.div`
 
 `;
@@ -54,9 +62,11 @@ const Boxcarrinho =({SrcFoto, Preco, TotalProduto, TituloProduto})=>{
          <ProdutoCarrinhoimg src={SrcFoto} alt="Produto"/>
          <Produto1>{TituloProduto}</Produto1>
          <Removebutton onClick={removerDoCarrinho}>Remove</Removebutton>
+            <Inputcarrinho type="text"/>
+            
          <Titleprecocarrinho>{Preco}</Titleprecocarrinho>
          <TitleTotalcarrinho >{TotalProduto}</TitleTotalcarrinho>
-
+         
         </BoxProdutosCarrinho>
         
         

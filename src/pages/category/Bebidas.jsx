@@ -12,10 +12,11 @@ import { useState, useEffect} from "react";
 import { TitleCategory, TitleConteiner } from "../../components/titles";
 import BoxProdutos from '../../components/BoxProdutos'
 import { DivProdutos } from '../../components/BoxProdutos';
+import axios from "axios";
 
 const Bebidas = ()=>{
     
- 
+const [bebida, setBebida] = useState([]);
 const [sidebar, setSidebar] = useState(false)
 
 const ShowSidebar = () => setSidebar (!sidebar)
@@ -43,6 +44,33 @@ const [bebidas, setBebidas] = useState([]);
     fetchbebidas();
   }, []);
 
+  //Aqui é puxar a api do das fotos
+
+  const fetchCategoriaFotos = async (categoria) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/fotos/${categoria}`, bebida, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      });
+
+      const data = await response.json();
+      console.log('Fotos da categoria:', data);
+      setBebida(data);
+      console.log("data",bebida);
+    } catch (error) {
+      console.error('Erro ao buscar fotos da categoria:', error);
+    }
+  };
+
+  // Exemplo de como chamar a função para buscar fotos de uma categoria específica
+  useEffect(() => {
+    const categoria = 'Bebida';
+    fetchCategoriaFotos(categoria);
+  }, []);
+  console.log(bebida)
   return(
 <>
 
@@ -79,9 +107,10 @@ const [bebidas, setBebidas] = useState([]);
 
    <DivProdutos>
     
-    {bebidas.slice(0, 3).map((bebidas)=>(
+{bebidas.slice(0, 3).map((bebidas, index)=>(
 <BoxProdutos
- ImgSrc="https://i.ibb.co/NLtRPrW/vinho-cabernet-sauvignon-casillero-del-diablo-750ml-28fa1dc6-cde1-41e9-a116-99a239427963.jpg"
+ key={index}
+ ImgSrc={bebida[index] || ""}
  DescricaoProduto={bebidas.nome}
  PrecoProduto={bebidas.descricao}
  />

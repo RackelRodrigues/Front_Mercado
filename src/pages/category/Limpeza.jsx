@@ -20,7 +20,8 @@ const Limpeza = ()=>{
     const [sidebar, setSidebar] = useState(false)
 
     const ShowSidebar = () => setSidebar (!sidebar)
-    
+    const [limpezas, setLimpezas] = useState([])
+
     const [limpeza, setLimpeza] = useState([]);
 
     useEffect(() => {
@@ -42,6 +43,35 @@ const Limpeza = ()=>{
       };
       fetchlimpeza();
     }, []);
+
+
+    const fetchCategoriaFotos = async (categoria) => {
+      try {
+        const response = await fetch(`http://localhost:5000/api/fotos/${categoria}`, limpezas, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        });
+  
+        const data = await response.json();
+        console.log('Fotos da categoria:', data);
+        setLimpezas(data);
+        console.log("data",limpezas);
+      } catch (error) {
+        console.error('Erro ao buscar fotos da categoria:', error);
+      }
+    };
+  
+    useEffect(() => {
+      const categoria = 'Limpeza';
+      fetchCategoriaFotos(categoria);
+    }, []);
+    console.log(limpezas)
+
+
+    
     return(
 <>
 
@@ -81,9 +111,10 @@ const Limpeza = ()=>{
 
 <DivProdutos>
 
-{limpeza.slice(0, 3).map((limpeza)=>(
+{limpeza.slice(0, 3).map((limpeza, index)=>(
 <BoxProdutos
- ImgSrc="https://i.ibb.co/WcWXH6p/nivea-sabonete.jpg"
+key={index}
+ ImgSrc={limpezas[index]|| ""}
  DescricaoProduto={limpeza.nome}
  PrecoProduto={limpeza.descricao}
  />

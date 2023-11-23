@@ -19,13 +19,13 @@ const Congelados = ()=>{
     const [sidebar, setSidebar] = useState(false)
 
     const ShowSidebar = () => setSidebar (!sidebar)
-    
-    const [congelados, setcongelados] = useState([]);
+    const [Congelados, setCongelados] = useState([]);
+    const [congelado, setcongelado] = useState([]);
 
     useEffect(() => {
       const fetchcongelados= async () => {
         try {
-          const response = await fetch('http://localhost:5000/api/buscar_congelados', {
+          const response = await fetch('http://127.0.0.1:5000/api/buscar_congelados', {
             method: 'GET',  // ou qualquer outro método que você precise
             headers: {
               'Content-Type': 'application/json',
@@ -34,13 +34,45 @@ const Congelados = ()=>{
           });
     
           const data = await response.json();
-          setcongelados(data);
+          setcongelado(data);
         } catch (error) {
           console.error('Erro ao buscar produtos:', error);
         }
       };
       fetchcongelados();
     }, []);
+
+
+
+    const fetchCategoriaFotos = async (categoria) => {
+      try {
+        const response = await fetch(`http://localhost:5000/api/fotos/${categoria}`, Congelados, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        });
+  
+        const data = await response.json();
+        console.log('Fotos da categoria:', data);
+        setCongelados(data);
+        console.log("data",Congelados);
+      } catch (error) {
+        console.error('Erro ao buscar fotos da categoria:', error);
+      }
+    };
+  
+    // Exemplo de como chamar a função para buscar fotos de uma categoria específica
+    useEffect(() => {
+      const categoria = 'Congelado';
+      fetchCategoriaFotos(categoria);
+    }, []);
+    console.log(Congelados)
+
+
+
+
     return(
 <>
 
@@ -78,11 +110,12 @@ const Congelados = ()=>{
   </TitleConteiner>
 
 <DivProdutos>
-{congelados.slice(0, 3).map((congelados)=>(
+{congelado.slice(0, 3).map((congelado, index)=>(
   <BoxProdutos
- ImgSrc="https://i.ibb.co/nDHt53T/pizza-portuguesa-seara.jpg"
- DescricaoProduto={congelados.nome}
-PrecoProduto={congelados.descricao}
+key={index}
+ ImgSrc={Congelados[index] || ""}
+ DescricaoProduto={congelado.nome}
+PrecoProduto={congelado.descricao}
  />
 ))}
  </DivProdutos>

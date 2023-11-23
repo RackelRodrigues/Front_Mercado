@@ -21,6 +21,8 @@ const Padaria= ()=>{
     const [sidebar, setSidebar] = useState(false)
 
     const ShowSidebar = () => setSidebar (!sidebar)
+    
+    const [padarias, setPadarias] = useState([])
     const [padaria, setPadaria] = useState([]);
 
     useEffect(() => {
@@ -42,6 +44,33 @@ const Padaria= ()=>{
       };
       fetchPadaria();
     }, []);
+
+
+    const fetchCategoriaFotos = async (categoria) => {
+      try {
+        const response = await fetch(`http://localhost:5000/api/fotos/${categoria}`, padarias, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        });
+  
+        const data = await response.json();
+        setPadarias(data);
+        console.log('Fotos da categoria:', data);
+        
+        console.log("data",padarias);
+      } catch (error) {
+        console.error('Erro ao buscar fotos da categoria:', error);
+      }
+    };
+  
+    useEffect(() => {
+      const categoria = 'Padaria';
+      fetchCategoriaFotos(categoria);
+    }, []);
+    console.log(padarias)
 
     return(
 <>
@@ -82,9 +111,10 @@ const Padaria= ()=>{
 
 
 
-{padaria.slice(0, 3).map((padaria)=>(
+{padaria.slice(0, 3).map((padaria, index)=>(
 <BoxProdutos
- ImgSrc="https://i.ibb.co/WcWXH6p/nivea-sabonete.jpg"
+ key={index}
+ ImgSrc={padarias[index] || ""}
  DescricaoProduto={padaria.nome}
  PrecoProduto={padaria.descricao}
  />

@@ -50,32 +50,70 @@ const Home = () => {
     console.log('Adicionado ao carrinho:', item);
   };
 //mostar e fechar sidebar
-  const [sidebar, setSidebar] = useState(false)
+  const [sidebar, setSidebar] = useState(false);
 
-  const ShowSidebar = () => setSidebar (!sidebar)
+  const ShowSidebar = () => setSidebar (!sidebar);
+
+  const [promocao, setPromocao] = useState([]);
 
   const [promocoes, setPromocoes] = useState([]);
+
+  const [busca, setBusca] = useState('');
+
+  const promoçoesfiltradas = promocoes.filter((promocao) => promocao.nome.includes(busca.toLowerCase()));
 
   useEffect(() => {
     const fetchPromocao = async () => {
       try {
         const response = await fetch('http://localhost:5000/api/buscar_promocoes', {
-          method: 'GET',  // ou qualquer outro método que você precise
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
           },
-          credentials: 'include',  // Isso é equivalente a withCredentials: true
+          credentials: 'include',
         });
+  
+        // Verifica se a resposta foi bem-sucedida
+        if (!response.ok) {
+          throw new Error(`Erro na solicitação: ${response.statusText}`);
+        }
   
         const data = await response.json();
         setPromocoes(data);
       } catch (error) {
-        console.error('Erro ao buscar produtos:', error);
+        console.error('Erro ao buscar promoções:', error.message);
       }
     };
   
     fetchPromocao();
   }, []);
+  
+
+  const fetchCategoriaFotos = async (categoria) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/fotos/${categoria}`, promocao, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      });
+
+      const data = await response.json();
+      console.log('Fotos da categoria:', data);
+      setPromocao(data);
+      console.log("data",promocao);
+    } catch (error) {
+      console.error('Erro ao buscar fotos da categoria:', error);
+    }
+  };
+
+  // Exemplo de como chamar a função para buscar fotos de uma categoria específica
+  useEffect(() => {
+    const categoria = 'Promocoes';
+    fetchCategoriaFotos(categoria);
+  }, []);
+  console.log(promocao)
 
 
   //para buscar os produtos:
@@ -94,7 +132,7 @@ const Home = () => {
         },
       });
 
-      setProdutos(response.data);
+      setFiltro(response.data);
     } catch (error) {
       console.error('Erro na requisição:', error.message);
     }
@@ -150,39 +188,40 @@ const Home = () => {
       <Mysliper/>
        </Promobox>
   
-       <BoxHome>
-        {filtro && (
-          // Renderize os produtos da pesquisa abaixo do cabeçalho
-          <BoxHome>
-            {produtos.map((produto, index) => (
-              <div key={index}>
-                {/* Renderize os produtos da pesquisa... */}
-                {produto.nome}
-              </div>
-            ))}
-          </BoxHome>
-        )}
+        <BoxHome>
+        
+        <BoxHome>
+        {filtro && promocoes.length === 1 && (
+            <Boxpromocao
+              key={index}
+              Descricao={promocao.nome}
+              Desconto={promocao.porcentagem}
+              Precopromo={promocao.Promocao}
+              Precoreal={promocao.descricao}
+              SrcReal={promocao[index] || ""}
+              onAdicionarAoCarrinho={() => adicionarAoCarrinho(promocao)}
+            />
+            )}
+        </BoxHome>
+      
 
         {!filtro && (
           // Se não houver filtro, renderize os produtos do home
           <>
-            {promocoes.slice(0, 6).map((promocao, index) => (
+{promocoes.slice(0, 6).map((promocoes, index) => (
+    
   <Boxpromocao
     key={index}
-    Descricao={promocao.nome}
-    Desconto={promocao.porcentagem}
-    Precopromo={promocao.Promocao}
-    Precoreal={promocao.descricao}
-    SrcReal="https://i.ibb.co/9GvnfyS/durar-feij-o.jpg"
+    Descricao={promocoes.nome}
+    Desconto={promocoes.porcentagem}
+    Precopromo={promocoes.Promocao}
+    Precoreal={promocoes.descricao}
+    SrcReal={promocao[index]|| ""}
     onAdicionarAoCarrinho={() =>
-      adicionarAoCarrinho({
-        id: promocao.id,
-        foto: 'https://i.ibb.co/9GvnfyS/durar-feij-o.jpg',
-        titulo: promocao.nome,
-        preco: promocao.promocao,
-      })
+      adicionarAoCarrinho(promocoes)
     }
   />
+    
 ))}
           </>
         )}
