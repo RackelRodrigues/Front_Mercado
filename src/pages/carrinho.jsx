@@ -65,11 +65,20 @@ const MeuCarrinho = ()=>{
           console.log("Option selected:", option);
           setSelectedOption(option);
       
-          // Navegar para a página Home quando uma opção é selecionada
-          navigation.navigate('Home');
+          if (option === 'Pagar em Dinheiro') {
+            navigation.navigate('Home');
+          }
+          // Navegar para a página de Login quando "Cartão de Crédito" for selecionado
+          else if (option === 'Cartão de Crédito') {
+            navigation.navigate('Login'); // Substitua 'Login' pelo nome correto da sua página de login
+          }
+          else if (option === 'Pix'){
+            navigation.navigate('animais');
+          }
+          else if (option === 'Cartão de Credito'){
+            navigation.navigate('saude');
+          }
         };
-      
-        // Restante do seu componente...
       };
 
     //calcular a quantidade de itens do carrinho

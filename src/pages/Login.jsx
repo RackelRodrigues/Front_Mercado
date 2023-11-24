@@ -23,46 +23,38 @@ import { MoverArrow } from '../components/linkstyle';
 
 
 const Login = () =>{
-  const [loginData, setLoginData] = useState({
-    email: '',
-    senha: '',
-  });
+  const [email, setEmail] = useState('');
+  const [senha, setsenha] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setLoginData((prevData) => ({
-      ...prevData,
-      [name]: value,
-
-    
-    }));
-    console.log(loginData);
-    console.log(`Campo ${name} alterado para:`, value);
+    console.log(email)
+    console.log(senha)
+    if (name === 'email') {
+      setEmail(value);
+    } else if (name === 'senha') {
+      setsenha(value);
+    }
   };
 
-//para a pag de address
+//para a pag de home
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    if (!loginData.email || !loginData.senha) { 
-      return (
-        <TitleH3>Email e senha são obrigatórios</TitleH3>
-      
-
-    );
+    if (!email || !senha) { 
+        console.log("Email e senha são obrigatórios")
+        return;
+    
     }
   
-    console.log('Dados a serem enviados:', loginData);
+    console.log('Dados a serem enviados:', email, senha);
   
     try {
-      const response = await axios.post('http://127.0.0.1:5000/api/login', loginData, {headers:{
-        'Content-Type': 'application/json'
-      },
-      withCredentials: true, 
-   });
-      
+      const response = await axios.get(`http://127.0.0.1:5000/api/login`, {
+        params: { email, senha },
+      });
   
       console.log('Resposta da API:', response);
   
@@ -101,7 +93,7 @@ const Login = () =>{
     type='email' 
     name='email'
     placeholder='Digite seu Email'
-    value={loginData.email}
+    value={email}
     onChange={handleChange}
     />
     <BsPerson size={30} color="#000000"/>
@@ -115,7 +107,7 @@ const Login = () =>{
     type='password' 
     placeholder='Digite sua senha'
     name='senha'
-    value={loginData.senha}
+    value={senha}
     onChange={handleChange}
     />
     <BiLockAlt size={30} color="#000000"/>

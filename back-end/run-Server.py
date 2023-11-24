@@ -189,27 +189,44 @@ def addCategory():
         return jsonify(error_message), 400
 
 #################################################
-@app.route('/api/login', methods=['POST'])
-def login():
-    data = request.get_json()
-
-    if 'email' not in data or 'senha' not in data:
-        return jsonify({'error': 'Informe email e senha'}), 400
-
-    email = data['email']
-    senha = data['senha']
-
+@app.route('/api/login' )
+def login(): 
     try:
-        usuario = Usuarios.get(Usuarios.email == email, Usuarios.senha == senha)
-        response = jsonify({'mensagem': 'Login bem-sucedido', 'usuario_id': usuario.id})
-        response.headers.add('Access-Control-Allow-Origin', 'http://localhost:5173')  # Substitua pela origem do seu aplicativo React
-        return response
-    except Usuarios.DoesNotExist:
-        return jsonify({'error': 'Credenciais inválidas'}), 401
+     
+     email = request.args.get('email')
+     senha = request.args.get('senha')
+     print(email, senha)
+    
+
+     if not email or not senha:
+        raise ValueError("Credenciais incompletas")
+
+     query = Usuarios.select().where(Usuarios.email == email, Usuarios.senha == senha)
+     user = query.first()
+
+     response = {
+            "message": "Login bem-sucedido",
+            "user_id": user.id,
+            "username": user.nome,
+            "telefone" : user.telefone,
+            "cpf" : user.cpf
+        }
+    
+
+     if senha == user.senha and email == user.email:
+            return jsonify(response), 200
+
+     else:
+            raise ValueError("Usuário não encontrado")
 
 
+    except Exception as e:
+        error_message = {"error": str(e)}
+        return jsonify(error_message), 500
 
-app.secret_key = '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'  # Substitua com uma chave secreta segura
+#google criar conta 
+
+app.secret_key = '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'
 CLIENT_ID = '634127394492-i8gn4lsl40g2lrccs02kme9r5puhb0ti.apps.googleusercontent.com'
 CLIENT_SECRET = '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'
 REDIRECT_URI = ["http://localhost:5173", "http://127.0.0.1:5000"]
@@ -225,6 +242,7 @@ client_config = {
         "redirect_uris": REDIRECT_URI
     }
 }
+
 
 @app.route('/api/buscar_higiene', methods=['GET'])
 def buscar_Higine():

@@ -15,10 +15,10 @@ class Usuarios(BaseModel):
     email = TextField(unique=True, null=False)
     cpf = TextField(unique=True, null=False)
     telefone = TextField(null=False)
-    confirme = TextField(null=False)
+    #confirme = TextField(null=False)
     senha = TextField(null=False)
-    criadoEm = DateTimeField(constraints=[SQL('DEFAULT CURRENT_TIMESTAMP')])
-    modificadoEm = DateTimeField(constraints=[SQL('DEFAULT CURRENT_TIMESTAMP')])
+    #criadoEm = DateTimeField(constraints=[SQL('DEFAULT CURRENT_TIMESTAMP')])
+    #modificadoEm = DateTimeField(constraints=[SQL('DEFAULT CURRENT_TIMESTAMP')])
 
 
 class Enderecos(BaseModel):
@@ -28,8 +28,8 @@ class Enderecos(BaseModel):
     cep = TextField(null=False)
     complemento = TextField(null=False)
     usuario = ForeignKeyField(Usuarios, backref='enderecos', on_delete='CASCADE')
-    criadoEm = DateTimeField(constraints=[SQL('DEFAULT CURRENT_TIMESTAMP')])
-    modificadoEm = DateTimeField(constraints=[SQL('DEFAULT CURRENT_TIMESTAMP')])
+    #criadoEm = DateTimeField(constraints=[SQL('DEFAULT CURRENT_TIMESTAMP')])
+    #modificadoEm = DateTimeField(constraints=[SQL('DEFAULT CURRENT_TIMESTAMP')])
 
 
 class Categorias(BaseModel):
