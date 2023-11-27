@@ -25,7 +25,7 @@ const Congelados = ()=>{
     useEffect(() => {
       const fetchcongelados= async () => {
         try {
-          const response = await fetch('http://127.0.0.1:5000/api/buscar_congelados', {
+          const response = await fetch('http://127.0.0.1:5000/api/Congelado/produtos', {
             method: 'GET',  // ou qualquer outro método que você precise
             headers: {
               'Content-Type': 'application/json',
@@ -110,12 +110,11 @@ const Congelados = ()=>{
   </TitleConteiner>
 
 <DivProdutos>
-{congelado.slice(0, 3).map((congelado, index)=>(
+{congelado.slice(0, 3).map((congelado)=>(
   <BoxProdutos
-key={index}
- ImgSrc={Congelados[index] || ""}
- DescricaoProduto={congelado.nome}
-PrecoProduto={congelado.descricao}
+ ImgSrc={congelado.urlImagem || ""}
+ DescricaoProduto={congelado.nome_produto}
+ PrecoProduto={congelado.valor}
  />
 ))}
  </DivProdutos>

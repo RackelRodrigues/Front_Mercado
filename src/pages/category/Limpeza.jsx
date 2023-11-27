@@ -27,7 +27,7 @@ const Limpeza = ()=>{
     useEffect(() => {
       const fetchlimpeza= async () => {
         try {
-          const response = await fetch('http://localhost:5000/api/buscar_limpeza', {
+          const response = await fetch('http://localhost:5000/api/Limpeza/produtos', {
             method: 'GET',  // ou qualquer outro método que você precise
             headers: {
               'Content-Type': 'application/json',
@@ -114,9 +114,9 @@ const Limpeza = ()=>{
 {limpeza.slice(0, 3).map((limpeza, index)=>(
 <BoxProdutos
 key={index}
- ImgSrc={limpezas[index]|| ""}
- DescricaoProduto={limpeza.nome}
- PrecoProduto={limpeza.descricao}
+ ImgSrc={limpeza.urlImagem || ""}
+ DescricaoProduto={limpeza.nome_produto}
+ PrecoProduto={limpeza.valor}
  />
  ))}
   

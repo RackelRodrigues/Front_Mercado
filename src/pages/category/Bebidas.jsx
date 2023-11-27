@@ -26,7 +26,7 @@ const [bebidas, setBebidas] = useState([]);
   useEffect(() => {
     const fetchbebidas= async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/buscar_bebidas', {
+        const response = await fetch('http://localhost:5000/api/Bebida/produtos', {
           method: 'GET',  // ou qualquer outro método que você precise
           headers: {
             'Content-Type': 'application/json',
@@ -44,33 +44,8 @@ const [bebidas, setBebidas] = useState([]);
     fetchbebidas();
   }, []);
 
-  //Aqui é puxar a api do das fotos
+ 
 
-  const fetchCategoriaFotos = async (categoria) => {
-    try {
-      const response = await fetch(`http://localhost:5000/api/fotos/${categoria}`, bebida, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      });
-
-      const data = await response.json();
-      console.log('Fotos da categoria:', data);
-      setBebida(data);
-      console.log("data",bebida);
-    } catch (error) {
-      console.error('Erro ao buscar fotos da categoria:', error);
-    }
-  };
-
-  // Exemplo de como chamar a função para buscar fotos de uma categoria específica
-  useEffect(() => {
-    const categoria = 'Bebida';
-    fetchCategoriaFotos(categoria);
-  }, []);
-  console.log(bebida)
   return(
 <>
 
@@ -107,12 +82,11 @@ const [bebidas, setBebidas] = useState([]);
 
    <DivProdutos>
     
-{bebidas.slice(0, 3).map((bebidas, index)=>(
+{bebidas.slice(0, 3).map((bebidas)=>(
 <BoxProdutos
- key={index}
- ImgSrc={bebida[index] || ""}
- DescricaoProduto={bebidas.nome}
- PrecoProduto={bebidas.descricao}
+ ImgSrc={bebidas.urlImagem || ""}
+ DescricaoProduto={bebidas.nome_produto}
+ PrecoProduto={bebidas.valor}
  />
   ))}
    

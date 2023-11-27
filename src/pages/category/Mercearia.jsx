@@ -29,7 +29,7 @@ const Mercearia = ()=>{
     useEffect(() => {
       const fetchmercearia = async () => {
         try {
-          const response = await fetch('http://localhost:5000/api/buscar_mercearia', {
+          const response = await fetch('http://localhost:5000/api/Mercearia/produtos', {
             method: 'GET',  // ou qualquer outro método que você precise
             headers: {
               'Content-Type': 'application/json',
@@ -119,9 +119,9 @@ const Mercearia = ()=>{
 {mercearia.slice(0, 3).map((mercearia, index)=>(
 <BoxProdutos
 key={index}
- ImgSrc={mercearias[index] || ""}
- DescricaoProduto={mercearia.nome}
- PrecoProduto={mercearia.descricao}
+ ImgSrc={mercearia.urlImagem || ""}
+ DescricaoProduto={mercearia.nome_produto}
+ PrecoProduto={mercearia.valor}
  />
  ))}
   

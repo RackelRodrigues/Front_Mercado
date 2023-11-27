@@ -47,28 +47,11 @@ justify-content: center;
 
 `;
 
-const DescontoProduto = Styled.p`
-width: 50px;
-height: 20px;
-border-radius: 10px;
-font-size: 15px;
-font-weight: bold;
-font-family: 'Lato', sem serifa;
-color: #000;
-display: flex;
-align-itens: center;
-jsutify-content: center;
-border: 1px #000 solid;
-display: flex;
-justify-content: center;
-background-color: #fff;
 
 
 
-`;
 
-
-  const ConteinerProduto = Styled.div`
+const ConteinerProduto = Styled.div`
  width: 300px;
  height: 300px;
  background-color: #ffff;
@@ -85,8 +68,9 @@ const Conteinerprecos = Styled.div`
 display: flex;
 background-color: #ffff;
 align-items: center;
-justify-content: center;
-margin-bottom: 10px;
+position: relative;
+right: -120px;
+
 `;
 
 const Boxpromocao = ({Desconto, Descricao, Precopromo, Precoreal, SrcReal}) =>{
@@ -112,10 +96,7 @@ const Boxpromocao = ({Desconto, Descricao, Precopromo, Precoreal, SrcReal}) =>{
     <DescricaoProduto>{Descricao}</DescricaoProduto>
     <Precopromoçao>{Precopromo}</Precopromoçao>
     <Conteinerprecos>
-      
-    <DescontoProduto>{Desconto}</DescontoProduto>
     <Preco>{Precoreal}</Preco>
-  
     </Conteinerprecos>
     <ButtonAdicione onClick={() => adicionarAoCarrinho({
     })} >Adicione ao carrinho</ButtonAdicione>

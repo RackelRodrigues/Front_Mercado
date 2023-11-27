@@ -60,7 +60,7 @@ const Home = () => {
 
   const [busca, setBusca] = useState('');
 
-  const promoçoesfiltradas = promocoes.filter((promocao) => promocao.nome.includes(busca.toLowerCase()));
+ 
 
   useEffect(() => {
     const fetchPromocao = async () => {
@@ -70,7 +70,7 @@ const Home = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          credentials: 'include',
+         
         });
   
         // Verifica se a resposta foi bem-sucedida
@@ -87,40 +87,14 @@ const Home = () => {
   
     fetchPromocao();
   }, []);
+
   
-
-  const fetchCategoriaFotos = async (categoria) => {
-    try {
-      const response = await fetch(`http://localhost:5000/api/fotos/${categoria}`, promocao, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      });
-
-      const data = await response.json();
-      console.log('Fotos da categoria:', data);
-      setPromocao(data);
-      console.log("data",promocao);
-    } catch (error) {
-      console.error('Erro ao buscar fotos da categoria:', error);
-    }
-  };
-
-  // Exemplo de como chamar a função para buscar fotos de uma categoria específica
-  useEffect(() => {
-    const categoria = 'Promocoes';
-    fetchCategoriaFotos(categoria);
-  }, []);
-  console.log(promocao)
-
 
   //para buscar os produtos:
 
   const [produtos, setProdutos] = useState([]);
   const [filtro, setFiltro] = useState('');
-
+//Aqui é para buscar os produtos pelo search
   const handleChange = async (e) => {
     const { value } = e.target;
     setFiltro(value);
@@ -138,21 +112,7 @@ const Home = () => {
     }
   };
 
-  //const [files, setFiles] = useState([]);
-
- // useEffect(() => {
-   // const fetchData = async () => {
-     // try {
-        //const response = await axios.get('http://localhost:5000/google-api');
-       // setFiles(response.data.files);
-       // console.log(response.data.files);
-     // } catch (error) {
-       // console.error('Erro ao obter dados do Google Drive:', error);
-    //  }
-  //  };
-
-  //  fetchData();
- // }, []);
+  
 
     return(
         <DivHome>
@@ -191,40 +151,26 @@ const Home = () => {
         <BoxHome>
         
         <BoxHome>
-        {filtro && promocoes.length === 1 && (
-            <Boxpromocao
-              key={index}
-              Descricao={promocao.nome}
-              Desconto={promocao.porcentagem}
-              Precopromo={promocao.Promocao}
-              Precoreal={promocao.descricao}
-              SrcReal={promocao[index] || ""}
-              onAdicionarAoCarrinho={() => adicionarAoCarrinho(promocao)}
-            />
-            )}
+      
+       {promocoes.slice(0, 6).map((promocao) => (
+       <Boxpromocao
+       
+      Descricao={promocao.produto_referente}
+      Precopromo={promocao.Preco_Antigo}
+      Precoreal={promocao.Preco_Atual}
+      SrcReal={promocao.urlImagem || ""}
+      onAdicionarAoCarrinho={() => adicionarAoCarrinho(promocao)}
+    />
+  ))}
+
         </BoxHome>
       
 
-        {!filtro && (
           // Se não houver filtro, renderize os produtos do home
           <>
-{promocoes.slice(0, 6).map((promocoes, index) => (
-    
-  <Boxpromocao
-    key={index}
-    Descricao={promocoes.nome}
-    Desconto={promocoes.porcentagem}
-    Precopromo={promocoes.Promocao}
-    Precoreal={promocoes.descricao}
-    SrcReal={promocao[index]|| ""}
-    onAdicionarAoCarrinho={() =>
-      adicionarAoCarrinho(promocoes)
-    }
-  />
-    
-))}
+
           </>
-        )}
+        
       </BoxHome>
         </DivHome>
     )

@@ -28,7 +28,7 @@ const Higiene = ()=>{
     useEffect(() => {
       const fetchhigiene= async () => {
         try {
-          const response = await fetch('http://localhost:5000/api/buscar_higiene', {
+          const response = await fetch('http://localhost:5000/api/Higiene/produtos', {
             method: 'GET',  // ou qualquer outro método que você precise
             headers: {
               'Content-Type': 'application/json',
@@ -48,31 +48,6 @@ const Higiene = ()=>{
     
 
 
-  const fetchCategoriaFotos = async (categoria) => {
-    try {
-      const response = await fetch(`http://localhost:5000/api/fotos/${categoria}`, higienes, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      });
-
-      const data = await response.json();
-      setHigienes(data);
-      console.log('Fotos da categoria:', data);
-    
-      console.log("data", higienes);
-    } catch (error) {
-      console.error('Erro ao buscar fotos da categoria:', error);
-    }
-  };
-
-  useEffect(() => {
-    const categoria = 'Higiene';
-    fetchCategoriaFotos(categoria);
-  }, []);
-  console.log(higienes)
 
 
     return(
@@ -117,14 +92,13 @@ const Higiene = ()=>{
 <DivProdutos>
 
 
-{higiene.slice(0, 3).map((higiene, index)=>(
-<BoxProdutos
- key={index}
- ImgSrc={higienes[index] || ""}
- DescricaoProduto={higiene.nome}
- PrecoProduto={higiene.descricao}
- />
- ))}
+{higiene.map((produto) => (
+    <BoxProdutos
+      ImgSrc={produto.urlImagem || ""}
+      DescricaoProduto={produto.nome_produto}
+      PrecoProduto={produto.valor}
+    />
+  ))}
   
 </DivProdutos>
 

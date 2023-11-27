@@ -21,7 +21,7 @@ import  {  GoogleOAuthProvider, GoogleLogin   }from '@react-oauth/google' ;
 
 const CreateAccount = () =>{
   const [formEnviado, setFormEnviado] = useState(false);
-  const [user, setUser] = useState({nome:'', email:'',cpf:'', telefone:'',senha:''})
+  const [user, setUser] = useState({nome:'', email:'',cpf:'', telefone:'',confirme:'',senha:''})
   
 
 
@@ -33,10 +33,21 @@ const CreateAccount = () =>{
       return updatedUser;
     });
   };
-  
+
+  const [errorMessagem, setErrorMessagem] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!user.nome.trim()||!user.email.trim()  || !user.cpf.trim()||!user.telefone.trim() ||!user.confirme.trim() || !user.senha.trim()) {
+      setErrorMessagem("Preencha todos os campos!");
+      console.log("Preencha todos os campos!");
+
+      setTimeout(() => {
+        setErrorMessagem("");
+      }, 3000);
+
+      return;
+    }
 
     try {
         const responseUser = await axios.post('http://127.0.0.1:5000/add/user', JSON.stringify(user),{
@@ -83,7 +94,11 @@ return (
 src='https://i.ibb.co/hXLbPJW/Design-sem-nome-2.jpg'
 />
 
+{errorMessagem && < MessageErr style={{ color: "red" }}>{errorMessagem}</MessageErr>}
+
 <TitleH2>Create your Account</TitleH2>
+
+
 
 <DivApi>
 <GoogleOAuthProvider clientId ="634127394492-gg2eah5se7ncabtnaovb4hpies130b8j.apps.googleusercontent.com">
@@ -126,7 +141,7 @@ src='https://i.ibb.co/hXLbPJW/Design-sem-nome-2.jpg'
 </DivInput>
 
 <DivInput>
-<Inputstyle type='text' placeholder='Numero de telefone'  name="telefone"
+<Inputstyle type='text' placeholder='Número de telefone'  name="telefone"
  value={user.telefone} onChange={handleChange}
 />
 <BsTelephone size={30} color='#000000'/>
@@ -139,13 +154,14 @@ src='https://i.ibb.co/hXLbPJW/Design-sem-nome-2.jpg'
 <AiOutlineMail size={30} color='#000000'/>
 </DivInput>
 <DivInput>
-<Inputstyle type='text' placeholder='Digite sua melhor senha' 
+<Inputstyle type='password' placeholder='Digite sua melhor senha' 
+value={user.confirme} onChange={handleChange}
 />
 <BiLockOpenAlt size={30} color='#000000'/>
 </DivInput>
 
 <DivInput>
-<Inputstyle type='text' placeholder='Confirme sua senha' name='senha'
+<Inputstyle type='password' placeholder='Confirme sua senha' name='senha'
 
 value={user.senha} onChange={handleChange}
 />

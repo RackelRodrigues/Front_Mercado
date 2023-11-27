@@ -24,7 +24,7 @@ const Saude = ()=>{
     useEffect(() => {
       const fetchSaude = async () => {
         try {
-          const response = await fetch('http://localhost:5000/api/buscar_saude', {
+          const response = await fetch('http://localhost:5000/api/Saude/produtos', {
             method: 'GET',  // ou qualquer outro método que você precise
             headers: {
               'Content-Type': 'application/json',
@@ -104,12 +104,12 @@ const Saude = ()=>{
 <DivProdutos>
 
 
-{saude.slice(0, 3).map((saude, index)=>(
+{saude.slice(0, 3).map((saude)=>(
 <BoxProdutos
- key={index}
- ImgSrc={saudes[index] || ""}
- DescricaoProduto={saude.nome}
- PrecoProduto={saude.descricao}
+
+ ImgSrc={saude.urlImagem || ""}
+ DescricaoProduto={saude.nome_produto}
+ PrecoProduto={saude.valor}
  />
  ))}
   

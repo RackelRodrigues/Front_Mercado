@@ -1,13 +1,13 @@
 from flask import *
 from esquema import *
 from playhouse.shortcuts import model_to_dict
-from produto import *
-from esquema import Enderecos
 from flask_cors import CORS
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from peewee import IntegrityError
-from produto import Promocao 
+from Gerar_qrcode import *
+from Gerar_qrTransfer import *
+from os import path
 
 
 
@@ -35,6 +35,7 @@ def addUser():
         email = data['email']
         cpf = data['cpf']
         telefone = data['telefone']
+        confirme =data['confirme']
         senha = data['senha']
        
         print(nome,email,cpf,telefone,senha)
@@ -44,6 +45,7 @@ def addUser():
             email = email,
             cpf = cpf,
             telefone = telefone,
+            confirme = confirme,
             senha=senha,
           
         )   
@@ -56,6 +58,12 @@ def addUser():
         }
 
         return jsonify({'message': 'Usuário adicionado com sucesso'})
+         
+
+    except Exception as e:
+        error_message = {"error": str(e)}
+        print("Erro:", e)
+        return jsonify(error_message), 400
 
     except Exception as e:
         error_message = {"error": str(e)}
@@ -142,15 +150,19 @@ def addProducts():
         data = request.get_json()
         nome_produto = data['nome_produto']
         valor = data['valor']
-        categoria_id = data['categoria']
+        categoria_id = data['categoria'] # nome da categoria
         quantidade = data['quantidade']
+        referente = data['promocao_nome']
+        url = data['url_imagem']
 
         produto = Produtos(
             nome_produto = nome_produto,
             valor = valor,
-            categoria = Categorias.select().where(Categorias.nome == categoria_id).get(),
-            quantidade = quantidade
-        )   
+            quantidade = quantidade,
+            categoria = Categorias.select().where(Categorias.descricao == categoria_id).get(), # nome da categoria
+            promocao = Promocao.select().where(Promocao.produto_referente == referente).get(),
+            urlImagem = url
+        )
         produto.save()
 
         response = {
@@ -165,6 +177,75 @@ def addProducts():
         return jsonify(error_message), 400
     
 
+@app.route('/api/carrinho/<usuario_email>', methods=['GET'])
+def ver_carrinho(usuario_email):
+    try:
+        query = Usuarios.select().where(Usuarios.email == usuario_email)
+
+        car = Carrinho.select().where(Carrinho.usuario == query.get().id)
+
+        
+        if not car: # usuario nao tem carrinho
+            carrinho = Carrinho(
+                usuario = Usuarios.select().where(Usuarios.email == usuario_email).get()
+            )   
+            carrinho.save()
+
+            response = {
+                "message": "Nao Ha Itens no seu Carrinho"
+            }
+
+           
+            return jsonify(response), 200
+
+        else:
+            query_itens = ItensCarrinho.select().where(ItensCarrinho.carrinho == car)
+            print(len(query_itens))
+
+            itens_dict = [model_to_dict(produto_item) for produto_item in query_itens]
+
+            return jsonify(itens_dict), 200
+
+
+    except Exception as e:
+       return jsonify({'erro': str(e)}), 500
+    
+
+@app.route('/add/promocao', methods=['Post'])
+def add_promocao():
+    try:
+        data = request.get_json()
+    
+        preco_atual = data['preco_atual']
+        referente_nome = data['referente_produto']
+        preco_antigo = data['preco_antigo']
+        urlImagem =data['urlImagem']
+
+        if not preco_atual:
+            raise ValueError("Credenciais incompletas")
+
+
+        promocao = Promocao(
+            produto_referente =referente_nome,
+            Preco_Antigo = preco_antigo,
+            Preco_Atual = preco_atual,
+            urlImagem = urlImagem
+
+        )
+        promocao.save()
+
+        response = {
+            "message": "promocao criada",
+            "dados enviados": data
+        }
+
+
+
+        return jsonify(response), 200
+
+    except Exception as e:
+            error_message = {"error": str(e)}
+            return jsonify(error_message), 500
 
 @app.route('/add/category', methods=['POST'])
 def addCategory():
@@ -173,7 +254,7 @@ def addCategory():
         descricao= data['descricao']
 
         categoria = Categorias(
-            decricao = descricao
+            descricao = descricao
         )   
         categoria.save()
 
@@ -244,147 +325,6 @@ client_config = {
 }
 
 
-@app.route('/api/buscar_higiene', methods=['GET'])
-def buscar_Higine():
-    try:
-        # Exemplo de busca de todas as promoções
-        Higienes = Higiene.select()
-
-        # Converta os objetos do modelo para dicionários para resposta JSON
-        Higiene_dict = [model_to_dict(Higiene) for Higiene in Higienes]
-
-        return jsonify(Higiene_dict), 200
-
-    except Exception as e:
-        error_message = {"error": str(e)}
-
-
-
-@app.route('/api/buscar_frescos', methods=['GET'])
-def buscar_Frescos():
-    try:
-        # Exemplo de busca de todas as promoções
-        Frescos = Fresco.select()
-
-        # Converta os objetos do modelo para dicionários para resposta JSON
-        Fresco_dict = [model_to_dict(Fresco) for Fresco in Frescos]
-
-        return jsonify(Fresco_dict), 200
-
-    except Exception as e:
-        error_message = {"error": str(e)}
-
-
-@app.route('/api/buscar_congelados', methods=['GET'])
-def buscar_Congelado():
-    try:
-        # Exemplo de busca de todas as promoções
-        congelado = Congelado.select()
-
-        # Converta os objetos do modelo para dicionários para resposta JSON
-        Congelado_dict = [model_to_dict(Congelado) for Congelado in congelado]
-
-        return jsonify(Congelado_dict), 200
-
-    except Exception as e:
-        error_message = {"error": str(e)}
-
-
-@app.route('/api/buscar_bebidas', methods=['GET'])
-def buscar_bebidas():
-    try:
-        # Exemplo de busca de todas as promoções
-        bebidas = Bebida.select()
-
-        # Converta os objetos do modelo para dicionários para resposta JSON
-        Bebidas_dict = [model_to_dict(Bebida) for Bebida in bebidas]
-
-        return jsonify(Bebidas_dict), 200
-
-    except Exception as e:
-        error_message = {"error": str(e)}
-
-@app.route('/api/buscar_animais', methods=['GET'])
-def buscar_animais():
-    try:
-        # Exemplo de busca de todas as promoções
-        animais= Animais.select()
-
-        # Converta os objetos do modelo para dicionários para resposta JSON
-        animais_dict = [model_to_dict(Animais) for Animais in animais]
-
-        return jsonify(animais_dict), 200
-
-    except Exception as e:
-        error_message = {"error": str(e)}
-
-
-
-
-@app.route('/api/buscar_limpeza', methods=['GET'])
-def buscar_limpeza():
-    try:
-        limpeza = Limpeza.select()
-        limpeza_dict = [model_to_dict(limpeza_item) for limpeza_item in limpeza]
-        return jsonify(limpeza_dict), 200
-
-    except Exception as e:
-        error_message = {"error": str(e)}
-        return jsonify(error_message), 500
-    
-
-
-@app.route('/api/buscar_mercearia', methods=['GET'])
-def buscar_mercearia():
-    try:
-        mercearia = Mercearia.select()
-        mercearia_dict = [model_to_dict(mercearia_item) for mercearia_item in mercearia]
-        return jsonify(mercearia_dict), 200
-
-    except Exception as e:
-        error_message = {"error": str(e)}
-        return jsonify(error_message), 500
-    
-
-@app.route('/api/buscar_organicos', methods=['GET'])
-def buscar_organicos():
-    try:
-        organicos = Organicos.select()
-        organicos_dict = [model_to_dict(organicos_item) for organicos_item in Organicos]
-        return jsonify(organicos_dict), 200
-
-    except Exception as e:
-        error_message = {"error": str(e)}
-        return jsonify(error_message), 500
-    
-
-    
-@app.route('/api/buscar_padaria', methods=['GET'])
-def buscar_padaria():
-    try:
-        padaria = Padaria.select()
-        Padaria_dict = [model_to_dict(padaria_item) for padaria_item in Padaria]
-        return jsonify(Padaria_dict), 200
-
-    except Exception as e:
-        error_message = {"error": str(e)}
-        return jsonify(error_message), 500
-    
-
-@app.route('/api/buscar_saude', methods=['GET'])
-def buscar_saude():
-    try:
-        saude = Saude.select()
-        saude_dict = [model_to_dict(saude_item) for saude_item in Saude]
-        return jsonify(saude_dict), 200
-
-    except Exception as e:
-        error_message = {"error": str(e)}
-        return jsonify(error_message), 500
-
-
-
-    
 #fazer uma busca com filtro no home
 
 @app.route('/api/buscar_produto', methods=['GET'])
@@ -428,30 +368,423 @@ def verificar_endereco_completo(user_id):
 ##########################################################
 #rota para verifcar os src das imagens 
 
-@app.route('/api/fotos/<categoria>', methods=['GET'])
-def obter_links_categoria_rota(categoria):
-    categorias = {
-        'Promocoes': ["https://i.ibb.co/wBqCNmb/produto1arroz.jpg", "https://i.ibb.co/d4NL4G1/combo.jpg", "https://i.ibb.co/f2Vx6by/pacote-de-feij-o.jpg", "https://i.ibb.co/hmcjrCx/chocolatr.jpg", "https://i.ibb.co/d4NL4G1/combo.jpg", "https://i.ibb.co/7KXVdzy/chocolate.jpg"],
-        'Animais': ["https://ibb.co/bbBkXw9", "https://ibb.co/jfhMvPy", "https://i.ibb.co/NLtRPrW/vinho-cabernet-sauvignon-casillero-del-diablo-750ml-28fa1dc6-cde1-41e9-a116-99a239427963.jpg"],
-        'Higiene': ["https://i.ibb.co/TmBzgv6/crest-shampoo.jpg", "https://i.ibb.co/WcWXH6p/nivea-sabonete.jpg", "https://i.ibb.co/y0zH9Ws/image.png"],
-        'Frescos': ["https://i.ibb.co/pnMngWQ/image.png", "https://i.ibb.co/gtMWYqC/alface.jpg", "https://i.ibb.co/ccmzhRK/image.png"],
-        'Bebida' : ["https://i.ibb.co/NLtRPrW/vinho-cabernet-sauvignon-casillero-del-diablo-750ml-28fa1dc6-cde1-41e9-a116-99a239427963.jpg", "https://i.ibb.co/dMB20wP/garrafa.jpg", "https://i.ibb.co/LJB0wGZ/image.png"],
-       'Mercearia':["https://i.ibb.co/cc5QYRc/uncle-bens-arroz.jpg", "https://i.ibb.co/PwTGThW/barilaa-marracarr-o.jpg", "https://i.ibb.co/9GvnfyS/durar-feij-o.jpg"],
-       'Limpeza': ["https://i.ibb.co/71rrP4N/image.png", "https://i.ibb.co/WGfVkY8/papel-toalha.jpg", "https://i.ibb.co/9ZwgXnr/detergente-ype.jpg"],
-       'Congelado' : ["https://i.ibb.co/nDHt53T/pizza-portuguesa-seara.jpg", "https://i.ibb.co/Kj8RBKz/file-de-frango.jpg", "https://i.ibb.co/8c9hyc9/ervilhas-daucy-ervilhas-finas.jpg"],
-        'Saude' : ["https://i.ibb.co/c3vbN6V/band-aid.jpg", "https://i.ibb.co/dm3rgv1/centrum.jpg", "https://i.ibb.co/N3fdZct/Nature-Made.jpg"],
-        'Animais':["https://i.ibb.co/b3dTFg3/image.png", "https://i.ibb.co/sgZbZXR/image.png", "https://i.ibb.co/HLvRmMq/image.png"],
-        'Padaria': ["https://i.ibb.co/ZXZFBcf/image.png","https://i.ibb.co/XLwStzZ/image.png", "https://i.ibb.co/mbR4Jgk/image.png"],
-        'Organicos': ["https://i.ibb.co/s2C3VX9/image.png", "https://i.ibb.co/YXV7n1J/image.png", "https://i.ibb.co/VtPRL8v/image.png"],
-        # Adicione mais categorias conforme necessário
-    }
 
-    if categoria in categorias:
-        links_categoria = categorias[categoria]
-        return jsonify(links_categoria)
-    else:
-        return jsonify({"error": "Categoria não encontrada"}), 404
+### Rotas de Produtos filtrando as categorias
+
+@app.route('/api/Higiene/produtos', methods=['GET'])
+def produto_higiene():
+    try:
+        # Exemplo de busca de todos os produtos
+        subconsulta = Categorias.select(Categorias.id).where(Categorias.descricao == 'Higiene')
+
+        produtos = Produtos.select().where(Produtos.categoria == subconsulta)
+
+        # Converta os objetos do modelo para dicionários para resposta JSON
+        produtos_dict = [model_to_dict(produto) for produto in produtos]
+
+           
+           
+        return jsonify(produtos_dict), 200
+
+    except Exception as e:
+            error_message = {"error": str(e)}
+            return jsonify(error_message), 500
+    
+
+@app.route('/api/Animais/produtos', methods=['GET'])
+def produto_animais():
+    try:
+        # Exemplo de busca de todos os produtos
+        subconsulta = Categorias.select(Categorias.id).where(Categorias.descricao == 'Animais')
+
+        produtos = Produtos.select().where(Produtos.categoria == subconsulta)
+
+        # Converta os objetos do modelo para dicionários para resposta JSON
+        produtos_dict = [model_to_dict(produto) for produto in produtos]
+
+           
+           
+        return jsonify(produtos_dict), 200
+
+    except Exception as e:
+            error_message = {"error": str(e)}
+            return jsonify(error_message), 500
+    
+
+@app.route('/api/Frescos/produtos', methods=['GET'])
+def produto_frescos():
+    try:
+        # Exemplo de busca de todos os produtos
+        subconsulta = Categorias.select(Categorias.id).where(Categorias.descricao == 'Frescos')
+
+        produtos = Produtos.select().where(Produtos.categoria == subconsulta)
+
+        # Converta os objetos do modelo para dicionários para resposta JSON
+        produtos_dict = [model_to_dict(produto) for produto in produtos]
+
+           
+           
+        return jsonify(produtos_dict), 200
+
+    except Exception as e:
+            error_message = {"error": str(e)}
+            return jsonify(error_message), 500
+    
+
+@app.route('/api/Bebida/produtos', methods=['GET'])
+def produto_bebidas():
+    try:
+        # Exemplo de busca de todos os produtos
+        subconsulta = Categorias.select(Categorias.id).where(Categorias.descricao == 'Bebida')
+
+        produtos = Produtos.select().where(Produtos.categoria == subconsulta)
+
+        # Converta os objetos do modelo para dicionários para resposta JSON
+        produtos_dict = [model_to_dict(produto) for produto in produtos]
+
+           
+           
+        return jsonify(produtos_dict), 200
+
+    except Exception as e:
+            error_message = {"error": str(e)}
+            return jsonify(error_message), 500
+
+@app.route('/api/Mercearia/produtos', methods=['GET'])
+def produto_mercearia():
+    try:
+        # Exemplo de busca de todos os produtos
+        subconsulta = Categorias.select(Categorias.id).where(Categorias.descricao == 'Mercearia')
+
+        produtos = Produtos.select().where(Produtos.categoria == subconsulta)
+
+        # Converta os objetos do modelo para dicionários para resposta JSON
+        produtos_dict = [model_to_dict(produto) for produto in produtos]
+
+           
+           
+        return jsonify(produtos_dict), 200
+
+    except Exception as e:
+            error_message = {"error": str(e)}
+            return jsonify(error_message), 500
+    
+
+@app.route('/api/Limpeza/produtos', methods=['GET'])
+def produto_limpeza():
+    try:
+        # Exemplo de busca de todos os produtos
+        subconsulta = Categorias.select(Categorias.id).where(Categorias.descricao == 'Limpeza')
+
+        produtos = Produtos.select().where(Produtos.categoria == subconsulta)
+
+        # Converta os objetos do modelo para dicionários para resposta JSON
+        produtos_dict = [model_to_dict(produto) for produto in produtos]
+
+           
+           
+        return jsonify(produtos_dict), 200
+
+    except Exception as e:
+            error_message = {"error": str(e)}
+            return jsonify(error_message), 500
+    
+
+@app.route('/api/Congelados/produtos', methods=['GET'])
+def produto_congelado():
+    try:
+        # Exemplo de busca de todos os produtos
+        subconsulta = Categorias.select(Categorias.id).where(Categorias.descricao == 'Congelados')
+
+        produtos = Produtos.select().where(Produtos.categoria == subconsulta)
+
+        # Converta os objetos do modelo para dicionários para resposta JSON
+        produtos_dict = [model_to_dict(produto) for produto in produtos]
+
+           
+           
+        return jsonify(produtos_dict), 200
+
+    except Exception as e:
+            error_message = {"error": str(e)}
+            return jsonify(error_message), 500
+    
+
+@app.route('/api/Saude/produtos', methods=['GET'])
+def produto_saude():
+    try:
+        # Exemplo de busca de todos os produtos
+        subconsulta = Categorias.select(Categorias.id).where(Categorias.descricao == 'Saude')
+
+        produtos = Produtos.select().where(Produtos.categoria == subconsulta)
+
+        # Converta os objetos do modelo para dicionários para resposta JSON
+        produtos_dict = [model_to_dict(produto) for produto in produtos]
+
+           
+           
+        return jsonify(produtos_dict), 200
+
+    except Exception as e:
+            error_message = {"error": str(e)}
+            return jsonify(error_message), 500
+    
+
+@app.route('/api/Padaria/produtos', methods=['GET'])
+def produto_padaria():
+    try:
+        # Exemplo de busca de todos os produtos
+        subconsulta = Categorias.select(Categorias.id).where(Categorias.descricao == 'Padaria')
+
+        produtos = Produtos.select().where(Produtos.categoria == subconsulta)
+
+        # Converta os objetos do modelo para dicionários para resposta JSON
+        produtos_dict = [model_to_dict(produto) for produto in produtos]
+
+           
+           
+        return jsonify(produtos_dict), 200
+
+    except Exception as e:
+            error_message = {"error": str(e)}
+            return jsonify(error_message), 500
+    
+
+@app.route('/api/Organicos/produtos', methods=['GET'])
+def produto_organicos():
+    try:
+        # Exemplo de busca de todos os produtos
+        subconsulta = Categorias.select(Categorias.id).where(Categorias.descricao == 'Organicos')
+
+        produtos = Produtos.select().where(Produtos.categoria == subconsulta)
+
+        # Converta os objetos do modelo para dicionários para resposta JSON
+        produtos_dict = [model_to_dict(produto) for produto in produtos]
+
+           
+           
+        return jsonify(produtos_dict), 200
+
+    except Exception as e:
+            error_message = {"error": str(e)}
+            return jsonify(error_message), 500
+
+#########################################################################
+ #fazer o qrcode 
+cors = CORS(app, resources={r"/api/get_qr_code": {"origins": "http://localhost:5173"}}, supports_credentials=True)
+
+def generate_qr_code():
+    data = "Pago com sucesso! kkkkkkk"
+    img = qrcode.make(data)
+    img.save("Qrcode.png")
+
+@app.route('/api/get_qr_code', methods=['GET'])
+def get_qr_code():
+    return send_file('Qrcode.jpg', mimetype='image/jpg')
   
+#################################################################
+cors = CORS(app, resources={r"/api/get_qr_Transfer": {"origins": "http://localhost:5173"}}, supports_credentials=True)
+
+def generate_qr_Transfer():
+    data = "Transferencia feita com sucesso!"
+    img = qrcode.make(data)
+    img.save("QrTransfer.jpg")
+
+@app.route('/api/get_qr_Transfer', methods=['GET'])
+def get_qr_codee():
+    return send_file('QrTransfer.jpg', mimetype='image/jpg')
+
+#adicionar ao carrinho 
+@app.route('/api/carrinhoitens', methods=['POST'])
+def criar_carrinho():
+    try:
+        data = request.get_json()
+        username = data.get('username')
+        nome_produto = data.get('produto')
+        valor = data.get('valor')
+        quantidade = data.get('quantidade')
+
+        if not username:
+            raise ValueError("Credenciais incompletas")
+        
+        
+        query = Usuarios.select().where(Usuarios.nome == username) # busca usuario
+
+        car = Carrinho.select().where(Carrinho.usuario == query.get().id) # busca se existe carrinho do usuario
+
+
+        if not query:
+            raise ValueError("Usuario nao existe")
+
+
+        if not car: # usuario nao tem carrinho
+            carrinho = Carrinho(
+                usuario = Usuarios.select().where(Usuarios.nome == username).get()
+            )   
+            carrinho.save()
+
+            itens = ItensCarrinho(
+                carrinho = carrinho.get().id,
+                produto = Produtos.select().where(Produtos.nome_produto == nome_produto).get(),
+                quantidade = quantidade,
+                valor = valor
+            )
+            itens.save()
+
+            response = {
+                "message": "Carrinho criado",
+                "carrinho_id": carrinho.get().id
+            }
+
+           
+            return jsonify(response), 200
+
+        else:
+            query_car = Carrinho.select().where(Carrinho.usuario == query.get().id).get()
+            print(query_car.id)
+
+        
+            itens = ItensCarrinho(
+                carrinho = query_car.id,
+                produto = Produtos.select().where(Produtos.nome_produto == nome_produto).get(),
+                quantidade = quantidade,
+                valor = valor
+            )
+            itens.save()
+
+
+            response_itens = {
+                "message": "Item adicionado com sucesso",
+                "carrinho_id": query_car.id
+            }
+
+           
+            return jsonify(response_itens), 200
+
+
+    except Exception as e:
+            error_message = {"error": str(e)}
+            return jsonify(error_message), 500
+    
+    #verificar no carrinho as compras
+  
+@app.route('/api/carrinhoitens', methods=['POST'])
+def criar_carrinho():
+    try:
+        data = request.get_json()
+        email = data.get('email')
+        nome_produto = data.get('produto')
+        valor = data.get('valor')
+        quantidade = data.get('quantidade')
+
+        if not email:
+            raise ValueError("Credenciais incompletas")
+        
+        
+        query = Usuarios.select().where(Usuarios.email == email) # busca usuario
+
+        car = Carrinho.select().where(Carrinho.usuario == query.get().id) # busca se existe carrinho do usuario
+
+
+        if not query:
+            raise ValueError("Usuario nao existe")
+
+
+        if not car: # usuario nao tem carrinho
+            carrinho = Carrinho(
+                usuario = Usuarios.select().where(Usuarios.email == email).get()
+            )   
+            carrinho.save()
+
+            itens = ItensCarrinho(
+                carrinho = carrinho.get().id,
+                produto = Produtos.select().where(Produtos.nome_produto == nome_produto).get(),
+                quantidade = quantidade,
+                valor = valor
+            )
+            itens.save()
+
+            response = {
+                "message": "Carrinho criado",
+                "carrinho_id": carrinho.get().id
+            }
+
+           
+            return jsonify(response), 200
+
+        else:
+            query_car = Carrinho.select().where(Carrinho.usuario == query.get().id).get()
+            print(query_car.id)
+
+        
+            itens = ItensCarrinho(
+                carrinho = query_car.id,
+                produto = Produtos.select().where(Produtos.nome_produto == nome_produto).get(),
+                quantidade = quantidade,
+                valor = valor
+            )
+            itens.save()
+
+
+            response_itens = {
+                "message": "Item adicionado com sucesso",
+                "carrinho_id": query_car.id
+            }
+
+           
+            return jsonify(response_itens), 200
+
+
+    except Exception as e:
+            error_message = {"error": str(e)}
+            return jsonify(error_message), 500
+
+# registrar compra
+@app.route('/add/compra', methods=['POST'])
+def add_compra():
+    try:
+        data = request.get_json()
+        usuario_email = data['email']
+        carrinho_id = data['carrinho_id']
+        #query = Usuarios.select().where(Usuarios.email == usuario_email)
+
+        compra = Compra(
+            usuario = Usuarios.select().where(Usuarios.email == usuario_email).get()
+        )
+        compra.save()
+
+        query_itens = ItensCarrinho.select().where(ItensCarrinho.carrinho == carrinho_id)
+        print(query_itens)
+
+        itens_dict = [model_to_dict(produto_item) for produto_item in query_itens]
+
+
+        for item in itens_dict:
+            nome_produto = item.get('produto', {}).get('nome_produto')
+            valor = item.get('valor')
+
+            print(f'Nome do Produto: {nome_produto}, Valor: {valor}')
+
+            itens_compra = itensCompra(
+                venda = compra.get().id,
+                produto = item.get('produto', {}).get('id'),
+                quantidade = item.get('quantidade'),
+                valorUnitario = valor
+            )
+            itens_compra.save()
+
+            response = {
+                "message":"Compra realizada"
+            }
+
+
+        return jsonify(response), 200
+
+
+    except Exception as e:
+        return jsonify({'erro': str(e)}), 500
+
+
 @app.route('/')
 def index():
     return 'ok'

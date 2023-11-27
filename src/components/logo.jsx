@@ -29,13 +29,14 @@ position: relative;
 
 
 export const Carrinhoimg = styled.img`
- width: 200px;
+ width: 100px;
+
  max-width: 100%;
- height: 200px;
+ height: 100px;
  display: flex;
  position: absolute;
-top: -5%;
-left: 5%;
+top: 3%;
+left: 8%;
 
 `;
 

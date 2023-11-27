@@ -23,7 +23,7 @@ const Organicos = ()=>{
     useEffect(() => {
       const fetchOrganicos = async () => {
         try {
-          const response = await fetch('http://localhost:5000/api/buscar_organicos', {
+          const response = await fetch('http://localhost:5000/api/Organicos/produtos', {
             method: 'GET',  // ou qualquer outro método que você precise
             headers: {
               'Content-Type': 'application/json',
@@ -113,9 +113,9 @@ const Organicos = ()=>{
 {organicos.slice(0, 3).map((organicos, index)=>(
 <BoxProdutos
  key={index}
- ImgSrc={organico[index] || ""}
- DescricaoProduto={organicos.nome}
- PrecoProduto={organicos.descricao}
+ ImgSrc={organicos.urlImagem || ""}
+ DescricaoProduto={organicos.nome_produto}
+ PrecoProduto={organicos.valor}
  />
  ))}
 </DivProdutos>

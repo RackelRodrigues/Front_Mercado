@@ -26,6 +26,8 @@ const Login = () =>{
   const [email, setEmail] = useState('');
   const [senha, setsenha] = useState('');
 
+
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     console.log(email)
@@ -60,6 +62,8 @@ const Login = () =>{
   
       if (response.status === 200) {
         console.log('Login bem-sucedido:', response.data);
+        navigate('/BoxProdutos', { state: { email: email } });
+        navigate('/Boxcarrinho', { state: { email: email } });
         navigate('/Home');
       } else {
         console.error('Resposta do servidor não foi bem-sucedida:', response.status);

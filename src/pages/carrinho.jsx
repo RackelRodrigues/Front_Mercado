@@ -3,16 +3,16 @@ import {Link} from "react-router-dom";
 import {AiOutlineArrowLeft} from 'react-icons/ai';
 import { TitleCarrinho, TitlePontoChave, TitlesMetodo , Titlesquantidade, Titlesquantidade2, Titlesquantidade3} from "../components/titles";
 import Styled from 'styled-components';
-import Carrinho from '../images/carrinho.png';
 import { Carrinhoimg } from "../components/logo";
 import {PontoChave, MetodosCarrinho} from "../components/Boxcarrinho";
 import Boxcarrinho from "../components/Boxcarrinho";
 import Itens from "../components/itens";
 import CheckbokCarrinho from '../components/checkbok';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Checkbutton } from "../components/buttonstyle";
 import Itens2 from '../components/Itens2';
-import { useNavigation } from "react-router-dom";
+import { useNavigation , useLocation} from "react-router-dom";
+import axios from "axios";
 
 
 const BoxAlinhamento = Styled.div`
@@ -20,7 +20,6 @@ position: relative;
 margin-top: 150px;
 left: -30%;
 width: 864px;
-
 padding-bottom: 250px;
 `;
 
@@ -57,7 +56,7 @@ const MeuCarrinho = ()=>{
     
     const [carrinho, setCarrinho] = useState([])
     //para selecionar a opção de pagamento
-    const YourComponent = () => {
+    
         const navigation = useNavigation();
         const [selectedOption, setSelectedOption] = useState(null);
       
@@ -66,28 +65,51 @@ const MeuCarrinho = ()=>{
           setSelectedOption(option);
       
           if (option === 'Pagar em Dinheiro') {
-            navigation.navigate('Home');
+            navigate('LocationScreen');
           }
           // Navegar para a página de Login quando "Cartão de Crédito" for selecionado
-          else if (option === 'Cartão de Crédito') {
-            navigation.navigate('Login'); // Substitua 'Login' pelo nome correto da sua página de login
+          else if (option === 'transferencia Bancária') {
+            navigate('PaymentTransferencia'); // Substitua 'Login' pelo nome correto da sua página de login
           }
           else if (option === 'Pix'){
-            navigation.navigate('animais');
+            navigate('PaymenTPix');
           }
           else if (option === 'Cartão de Credito'){
-            navigation.navigate('saude');
+            navigate('PaymentCardPage');
           }
         };
-      };
+      
 
-    //calcular a quantidade de itens do carrinho
+        const location = useLocation();
+        const { email } = location.state || {}; 
+        const [carrinhoItens, setCarrinhoItens] = useState([]);
+
+        useEffect(() => {
+          const obterItensDoCarrinho = async () => {
+            try {
+              // Substitua 'SEU_USUARIO_EMAIL' pelo e-mail do usuário
+              const usuarioEmail = email;
+      
+              // Faça a solicitação para a rota do carrinho usando Axios
+              const response = await axios.get(`/api/carrinho/${usuarioEmail}`);
+              
+              // Atualize o estado com os itens do carrinho
+              setCarrinhoItens(response.data);
+            } catch (error) {
+              // Lide com erros aqui
+              console.error(error);
+            }
+          };
+      
+          // Chame a função para obter itens do carrinho quando o componente for montado
+          obterItensDoCarrinho();
+        }, []); 
     
     return(
     <>
   
 <DivTitle>
-    <Carrinhoimg src={Carrinho}/>
+    <Carrinhoimg src="https://i.ibb.co/sRr4Z3N/carrinho-de-compras.png"/>
     <TitleCarrinho>Carrinho</TitleCarrinho>
 </DivTitle>
 

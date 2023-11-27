@@ -13,6 +13,19 @@ import {Link} from "react-router-dom";
 import { ImgUser } from '../components/logo';
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import Styled from 'styled-components';
+
+
+const MessageErr = Styled.h4`
+color: red;
+font-size: 25px;
+display: flex;
+align-items: center;
+justify-content: center;
+text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+
+`;
+
 
 const Addressdata =()=>{
     const [address, setAddress] = useState({rua: '', bairro: '', numero: '', cep:'', complemento:'', usuario_nome:''}) 
@@ -29,9 +42,19 @@ const Addressdata =()=>{
   
     
     const navigate = useNavigate();
+    
+    const [errorMessage, setErrorMessage] = useState("");
 
     const handleSubmit = async (e) => {
       e.preventDefault();
+      if (!address.rua.trim()||!address.bairro.trim()||!address.numero.trim()||!address.cep.trim()||!address.complemento.trim() || !address.usuario_nome.trim()) {
+        setErrorMessage("Preencha todos os campos !!");
+
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 3000);
+        return;
+      }
   
       try {
        
@@ -85,6 +108,8 @@ const Addressdata =()=>{
 
 
 <TitleH2>Address</TitleH2>
+
+{errorMessage && < MessageErr style={{ color: "red" }}>{errorMessage}</MessageErr>}
 
 <Form onSubmit={handleSubmit}>
 <Divconteinerstyle >

@@ -26,7 +26,7 @@ const Frescos = ()=>{
   useEffect(() => {
     const fetchfrescos= async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/buscar_frescos', {
+        const response = await fetch('http://localhost:5000/api/Frescos/produtos', {
           method: 'GET',  // ou qualquer outro método que você precise
           headers: {
             'Content-Type': 'application/json',
@@ -45,31 +45,6 @@ const Frescos = ()=>{
   }, []);
     
 
-//buscar fotos dinacamente
-  const fetchCategoriaFotos = async (categoria) => {
-    try {
-      const response = await fetch(`http://localhost:5000/api/fotos/${categoria}`, fresco, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      });
-
-      const data = await response.json();
-      console.log('Fotos da categoria:', data);
-      setFresco(data);
-      console.log("data",fresco);
-    } catch (error) {
-      console.error('Erro ao buscar fotos da categoria:', error);
-    }
-  };
-
-  useEffect(() => {
-    const categoria = 'Frescos';
-    fetchCategoriaFotos(categoria);
-  }, []);
-  console.log(fresco)
 
     return(
 <>
@@ -108,12 +83,12 @@ const Frescos = ()=>{
   </TitleConteiner>
 
 <DivProdutos>
-  {frescos.slice(0, 3).map((frescos, index)=>(
+  {frescos.slice(0, 3).map((frescos)=>(
 <BoxProdutos
- key={index}
- ImgSrc={fresco[index] || ""}
- DescricaoProduto={frescos.nome}
- PrecoProduto={frescos.descricao}
+
+ ImgSrc={frescos.urlImagem || ""}
+ DescricaoProduto={frescos.nome_produto}
+ PrecoProduto={frescos.valor}
 
  />
   ))}

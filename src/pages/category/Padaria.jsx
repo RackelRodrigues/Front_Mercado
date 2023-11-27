@@ -28,7 +28,7 @@ const Padaria= ()=>{
     useEffect(() => {
       const fetchPadaria = async () => {
         try {
-          const response = await fetch('http://localhost:5000//api/buscar_padaria', {
+          const response = await fetch('http://localhost:5000/api/Padaria/produtos', {
             method: 'GET',  // ou qualquer outro método que você precise
             headers: {
               'Content-Type': 'application/json',
@@ -114,9 +114,9 @@ const Padaria= ()=>{
 {padaria.slice(0, 3).map((padaria, index)=>(
 <BoxProdutos
  key={index}
- ImgSrc={padarias[index] || ""}
- DescricaoProduto={padaria.nome}
- PrecoProduto={padaria.descricao}
+ ImgSrc={padaria.urlImagem || ""}
+ DescricaoProduto={padaria.nome_produto}
+ PrecoProduto={padaria.valor}
  />
  ))}
   

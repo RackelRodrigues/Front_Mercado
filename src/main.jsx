@@ -20,7 +20,12 @@ import Organicos from './pages/category/Organicos.jsx'
 import Padaria from './pages/category/Padaria.jsx'
 import Saude from './pages/category/saude.jsx'
 import Addressdata from './pages/Addressdata.jsx'
-
+import CardPage from './pages/Pagamentos/CardPage.jsx'
+import Pix  from './pages/Pagamentos/Pix.jsx'
+import concluido from '../src/pages/concluido.jsx'
+import Transferencia from './pages/Pagamentos/transferencia.jsx'
+import Concluido from '../src/pages/concluido.jsx'
+import Concluido2 from './pages/Concluido2.jsx'
 
 
 
@@ -94,10 +99,32 @@ const router =  createBrowserRouter ([
     path: "saude",
     element: <Saude/>,
 
-  },{
+  },
+  {
     path:"Padaria",
     element: <Padaria/>,
+  },
+  {
+    path:"PaymentCardPage",
+    element: <CardPage/>,
+  },
+  {
+    path:"PaymenTPix",
+    element: <Pix/>,
+  },
+  {
+    path:"PaymentTransferencia",
+    element: <Transferencia/>,
+  },
+  {
+    path:"screenwait",
+    element: <Concluido/>,
+  },
+  {
+    path:"LocationScreen",
+    element:<Concluido2/>
   }
+
 ]
   }
 ])

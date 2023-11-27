@@ -27,7 +27,7 @@ const Animais = () =>{
   useEffect(() => {
     const fetchanimais= async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/buscar_animais', {
+        const response = await fetch('http://localhost:5000/api/Animais/produtos', {
           method: 'GET',  // ou qualquer outro método que você precise
           headers: {
             'Content-Type': 'application/json',
@@ -47,31 +47,6 @@ const Animais = () =>{
 
 
 
-  const fetchCategoriaFotos = async (categoria) => {
-    try {
-      const response = await fetch(`http://localhost:5000/api/fotos/${categoria}`, Animal, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      });
-
-      const data = await response.json();
-      console.log('Fotos da categoria:', data);
-      setAnimal(data);
-      console.log("data",Animal);
-    } catch (error) {
-      console.error('Erro ao buscar fotos da categoria:', error);
-    }
-  };
-
-  // Exemplo de como chamar a função para buscar fotos de uma categoria específica
-  useEffect(() => {
-    const categoria = 'Animais';
-    fetchCategoriaFotos(categoria);
-  }, []);
-  console.log(Animal)
 
     return(
 <>
@@ -108,12 +83,12 @@ const Animais = () =>{
  </TitleConteiner>
 
 <DivProdutos>
-{animais.slice(0, 3).map((animais, index)=>(
+{animais.slice(0, 3).map((animais)=>(
 <BoxProdutos
- key={index}
- ImgSrc={Animal[index] || ""}
- DescricaoProduto={animais.nome}
- PrecoProduto={animais.descricao}
+
+ ImgSrc={animais.urlImagem || ""}
+ DescricaoProduto={animais.nome_produto}
+ PrecoProduto={animais.valor}
  />
   ))}
 

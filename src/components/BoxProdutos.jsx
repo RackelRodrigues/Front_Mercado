@@ -53,18 +53,47 @@ display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-gap: 40px;
 height: 100%;
+margin-bottom: 30px;
 
 
 `;
 
 const BoxProdutos = ({ImgSrc, DescricaoProduto, PrecoProduto}) =>{
+
+  const { email } = useLocation().state;
+
+  const adicionarAoCarrinho = async () => {
+    try {
+      // Substitua 'SEU_USUARIO_EMAIL' pelo método real para obter o e-mail do usuário
+      const usuarioEmail = email;
+       console.log(email);
+      // Faça uma solicitação para a rota do backend usando Axios
+      const response = await axios.post('/api/carrinhoitens', {
+        username: usuarioEmail,
+        produto: DescricaoProduto, // Substitua pelo nome do produto ou outra informação relevante
+        valor: PrecoProduto, // Substitua pelo preço do produto ou outra informação relevante
+        quantidade: 1, // Substitua pela quantidade desejada ou outra informação relevante
+      });
+
+      // Lide com a resposta do backend, se necessário
+      console.log('Resposta do backend:', response.data);
+
+      // Adicione qualquer lógica adicional aqui, como atualizar o estado do carrinho no frontend
+    } catch (error) {
+      // Lide com erros, se necessário
+      console.error('Erro ao adicionar ao carrinho:', error);
+    }
+  };
+
+
+
     return(
     <>
     <ConteinerProdutos>
     <ImgProdutos src={ImgSrc} alt="fotos produtos"/>
     <DescricaoProdutos>{DescricaoProduto}</DescricaoProdutos>
     <PrecoProdutos>{PrecoProduto}</PrecoProdutos>
-    <ButtonAdicione >Adcione ao Carrinho</ButtonAdicione>
+    <ButtonAdicione onClick={adicionarAoCarrinho}>Adicione ao Carrinho</ButtonAdicione>
     </ConteinerProdutos>
     
     
