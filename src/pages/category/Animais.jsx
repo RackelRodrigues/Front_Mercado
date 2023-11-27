@@ -23,8 +23,13 @@ const Animais = () =>{
   const ShowSidebar = () => setSidebar (!sidebar)
 
   const [animais, setAnimais] = useState([]);
+  const [userEmail, setUserEmail] = useState(""); 
 
   useEffect(() => {
+
+    const userEmail = "usuario@email.com";
+    setUserEmail(userEmail);
+
     const fetchanimais= async () => {
       try {
         const response = await fetch('http://localhost:5000/api/Animais/produtos', {
@@ -45,7 +50,7 @@ const Animais = () =>{
     fetchanimais();
   }, []);
 
-
+  
 
 
     return(
@@ -85,7 +90,7 @@ const Animais = () =>{
 <DivProdutos>
 {animais.slice(0, 3).map((animais)=>(
 <BoxProdutos
-
+ key={animais.id} 
  ImgSrc={animais.urlImagem || ""}
  DescricaoProduto={animais.nome_produto}
  PrecoProduto={animais.valor}

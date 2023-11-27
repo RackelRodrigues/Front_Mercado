@@ -17,8 +17,17 @@ import {useNavigate} from 'react-router-dom';
 import{Form} from '../components/links'
 import {AiOutlineArrowLeft} from 'react-icons/ai';
 import { MoverArrow } from '../components/linkstyle';
+import styled from 'styled-components';
 
+const MessageErro = styled.h4`
+color: red;
+font-size: 25px;
+display: flex;
+align-items: center;
+justify-content: center;
+text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 
+`;
 
 
 
@@ -42,12 +51,20 @@ const Login = () =>{
 //para a pag de home
   const navigate = useNavigate();
 
+  const [errorMessagem, setErrorMessagem] = useState("");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
   
     if (!email || !senha) { 
-        console.log("Email e senha são obrigatórios")
-        return;
+      setErrorMessagem("Preencha todos os campos!");
+      console.log("Email e senha são obrigatórios")
+
+      setTimeout(() => {
+        setErrorMessagem("");
+      }, 3000);
+
+      return;
     
     }
   
@@ -64,6 +81,7 @@ const Login = () =>{
         console.log('Login bem-sucedido:', response.data);
         navigate('/BoxProdutos', { state: { email: email } });
         navigate('/Boxcarrinho', { state: { email: email } });
+        navigate('/Animais', { state: { email: email } });
         navigate('/Home');
       } else {
         console.error('Resposta do servidor não foi bem-sucedida:', response.status);
@@ -86,7 +104,7 @@ const Login = () =>{
 
 </Logo>
 
-    
+{errorMessagem && < MessageErro style={{ color: "red" }}>{errorMessagem}</MessageErro>}
     <TitleH3>Endereço e-mail</TitleH3>
 
 

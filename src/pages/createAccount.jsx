@@ -13,10 +13,23 @@ import axios from 'axios';
 import {Link, useNavigate}  from 'react-router-dom';
 import { GrHomeRounded } from "react-icons/gr";
 import { useState } from 'react';
+import styled from 'styled-components';
 import { jwtDecode } from "jwt-decode";
 import  {  GoogleOAuthProvider, GoogleLogin   }from '@react-oauth/google' ;
 
 
+
+
+
+const MessageErro = styled.h4`
+color: red;
+font-size: 25px;
+display: flex;
+align-items: center;
+justify-content: center;
+text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+
+`;
 
 
 const CreateAccount = () =>{
@@ -94,7 +107,7 @@ return (
 src='https://i.ibb.co/hXLbPJW/Design-sem-nome-2.jpg'
 />
 
-{errorMessagem && < MessageErr style={{ color: "red" }}>{errorMessagem}</MessageErr>}
+
 
 <TitleH2>Create your Account</TitleH2>
 
@@ -124,6 +137,8 @@ src='https://i.ibb.co/hXLbPJW/Design-sem-nome-2.jpg'
 <Divisao>ou use seu email</Divisao>
 </DivisaoContainer>
 
+{errorMessagem && < MessageErro style={{ color: "red" }}>{errorMessagem}</MessageErro>}
+
 <Form onSubmit={handleSubmit}>
 <Divconteinerstyle>
 <DivInput>
@@ -132,6 +147,7 @@ src='https://i.ibb.co/hXLbPJW/Design-sem-nome-2.jpg'
 />
 <BsPerson size={30} color="#000000"/>
 </DivInput>
+
 
 
 <DivInput>

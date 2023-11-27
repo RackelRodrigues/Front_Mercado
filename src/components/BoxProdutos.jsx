@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import {ButtonAdicione} from './buttonstyle';
+import { useLocation } from "react-router";
 
 
 
@@ -58,7 +59,7 @@ margin-bottom: 30px;
 
 `;
 
-const BoxProdutos = ({ImgSrc, DescricaoProduto, PrecoProduto}) =>{
+const BoxProdutos = ({ImgSrc, DescricaoProduto, PrecoProduto, email}) =>{
 
   const { email } = useLocation().state;
 
@@ -68,7 +69,7 @@ const BoxProdutos = ({ImgSrc, DescricaoProduto, PrecoProduto}) =>{
       const usuarioEmail = email;
        console.log(email);
       // Faça uma solicitação para a rota do backend usando Axios
-      const response = await axios.post('/api/carrinhoitens', {
+      const response = await axios.post('http://127.0.0.1:5000/api/carrinhoitens', {
         username: usuarioEmail,
         produto: DescricaoProduto, // Substitua pelo nome do produto ou outra informação relevante
         valor: PrecoProduto, // Substitua pelo preço do produto ou outra informação relevante

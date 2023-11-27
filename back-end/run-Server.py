@@ -668,76 +668,7 @@ def criar_carrinho():
     
     #verificar no carrinho as compras
   
-@app.route('/api/carrinhoitens', methods=['POST'])
-def criar_carrinho():
-    try:
-        data = request.get_json()
-        email = data.get('email')
-        nome_produto = data.get('produto')
-        valor = data.get('valor')
-        quantidade = data.get('quantidade')
 
-        if not email:
-            raise ValueError("Credenciais incompletas")
-        
-        
-        query = Usuarios.select().where(Usuarios.email == email) # busca usuario
-
-        car = Carrinho.select().where(Carrinho.usuario == query.get().id) # busca se existe carrinho do usuario
-
-
-        if not query:
-            raise ValueError("Usuario nao existe")
-
-
-        if not car: # usuario nao tem carrinho
-            carrinho = Carrinho(
-                usuario = Usuarios.select().where(Usuarios.email == email).get()
-            )   
-            carrinho.save()
-
-            itens = ItensCarrinho(
-                carrinho = carrinho.get().id,
-                produto = Produtos.select().where(Produtos.nome_produto == nome_produto).get(),
-                quantidade = quantidade,
-                valor = valor
-            )
-            itens.save()
-
-            response = {
-                "message": "Carrinho criado",
-                "carrinho_id": carrinho.get().id
-            }
-
-           
-            return jsonify(response), 200
-
-        else:
-            query_car = Carrinho.select().where(Carrinho.usuario == query.get().id).get()
-            print(query_car.id)
-
-        
-            itens = ItensCarrinho(
-                carrinho = query_car.id,
-                produto = Produtos.select().where(Produtos.nome_produto == nome_produto).get(),
-                quantidade = quantidade,
-                valor = valor
-            )
-            itens.save()
-
-
-            response_itens = {
-                "message": "Item adicionado com sucesso",
-                "carrinho_id": query_car.id
-            }
-
-           
-            return jsonify(response_itens), 200
-
-
-    except Exception as e:
-            error_message = {"error": str(e)}
-            return jsonify(error_message), 500
 
 # registrar compra
 @app.route('/add/compra', methods=['POST'])
